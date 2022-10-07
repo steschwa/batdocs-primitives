@@ -9,6 +9,7 @@
         "packages/*"
     ],
     "scripts": {
+        "preview": "ladle serve",
         "lint": "eslint packages --ext .ts,.tsx",
         "test": "vitest"
     },
@@ -17,6 +18,7 @@
         "react-dom": "^18.2.0"
     },
     "devDependencies": {
+        "@ladle/react": "^2.4.3",
         "@testing-library/react": "^13.4.0",
         "@testing-library/react-hooks": "^8.0.1",
         "@types/react": "^18.0.21",
