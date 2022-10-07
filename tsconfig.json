@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "paths": {
+            "@steschwa/collection": ["./packages/collection/src"],
+            "@steschwa/listbox": ["./packages/listbox/src"],
+            "@steschwa/use-controllable-state": ["./packages/use-controllable-state/src"],
+            "@steschwa/use-callback-ref": ["./packages/use-callback-ref/src"]
+        }
+    }
+}
