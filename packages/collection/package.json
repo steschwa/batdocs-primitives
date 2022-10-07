@@ -1,0 +1,24 @@
+{
+    "name": "@steschwa/collection",
+    "packageManager": "yarn@3.2.4",
+    "source": "src/index.ts",
+    "main": "dist/index.js",
+    "module": "dist/index.module.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@radix-ui/react-slot": "^1.0.0",
+        "@steschwa/compose-refs": "workspace:*"
+    },
+    "peerDependencies": {
+        "react": "*",
+        "react-dom": "*"
+    }
+}
