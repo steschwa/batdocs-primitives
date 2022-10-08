@@ -1,5 +1,6 @@
 {
     "name": "@batdocs/use-controllable-state",
+    "version": "0.0.1",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -12,7 +13,8 @@
     "sideEffects": false,
     "scripts": {
         "clean": "rm -rf dist",
-        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts"
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts",
+        "publish": "yarn npm publish --access public --tolerate-republish"
     },
     "dependencies": {
         "@batdocs/use-callback-ref": "workspace:*"

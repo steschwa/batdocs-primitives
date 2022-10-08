@@ -13,7 +13,8 @@
         "lint": "eslint packages --ext .ts,.tsx",
         "test": "vitest",
         "clean": "yarn workspaces foreach run clean",
-        "build": "yarn workspaces foreach run build"
+        "build": "yarn workspaces foreach run build",
+        "publish": "yarn workspaces foreach run publish"
     },
     "dependencies": {
         "react": "^18.2.0",
