@@ -1,1 +1,1 @@
-# @steschwa/compose-refs
+# @batdocs/compose-refs

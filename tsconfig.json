@@ -2,13 +2,13 @@
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "paths": {
-            "@steschwa/use-controllable-state": ["./packages/use-controllable-state/src"],
-            "@steschwa/use-callback-ref": ["./packages/use-callback-ref/src"],
-            "@steschwa/compose-refs": ["./packages/compose-refs/src"],
-            "@steschwa/compose-event-handlers": ["./packages/compose-event-handlers/src"],
-            "@steschwa/focus": ["./packages/focus/src"],
-            "@steschwa/collection": ["./packages/collection/src"],
-            "@steschwa/listbox": ["./packages/listbox/src"]
+            "@batdocs/use-controllable-state": ["./packages/use-controllable-state/src"],
+            "@batdocs/use-callback-ref": ["./packages/use-callback-ref/src"],
+            "@batdocs/compose-refs": ["./packages/compose-refs/src"],
+            "@batdocs/compose-event-handlers": ["./packages/compose-event-handlers/src"],
+            "@batdocs/focus": ["./packages/focus/src"],
+            "@batdocs/collection": ["./packages/collection/src"],
+            "@batdocs/listbox": ["./packages/listbox/src"]
         }
     }
 }

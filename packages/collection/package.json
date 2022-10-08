@@ -1,9 +1,9 @@
 {
-    "name": "@steschwa/collection",
+    "name": "@batdocs/collection",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
-    "module": "dist/index.module.js",
+    "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
     "files": [
         "dist",
@@ -11,14 +11,18 @@
     ],
     "sideEffects": false,
     "scripts": {
-        "clean": "rm -rf dist"
+        "clean": "rm -rf dist",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts"
     },
     "dependencies": {
-        "@radix-ui/react-slot": "^1.0.0",
-        "@steschwa/compose-refs": "workspace:*"
+        "@batdocs/compose-refs": "workspace:*",
+        "@radix-ui/react-slot": "^1.0.0"
     },
     "peerDependencies": {
         "react": "*",
         "react-dom": "*"
+    },
+    "devDependencies": {
+        "tsup": "^6.2.3"
     }
 }

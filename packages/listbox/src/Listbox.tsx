@@ -1,8 +1,8 @@
 import { Slot } from "@radix-ui/react-slot"
-import { createCollection } from "@steschwa/collection"
-import { composeEventHandlers } from "@steschwa/compose-event-handlers"
-import { getFirstFocusable, saveFocus } from "@steschwa/focus"
-import { useControllableState } from "@steschwa/use-controllable-state"
+import { createCollection } from "@batdocs/collection"
+import { composeEventHandlers } from "@batdocs/compose-event-handlers"
+import { getFirstFocusable, saveFocus } from "@batdocs/focus"
+import { useControllableState } from "@batdocs/use-controllable-state"
 import * as React from "react"
 import {
     ListboxContext,

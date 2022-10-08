@@ -1,1 +1,1 @@
-# @steschwa/compose-event-handlers
+# @batdocs/compose-event-handlers

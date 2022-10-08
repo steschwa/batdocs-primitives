@@ -1,6 +1,6 @@
 import React from "react"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
-import { useComposedRefs } from "@steschwa/compose-refs"
+import { useComposedRefs } from "@batdocs/compose-refs"
 
 type ObjectType = Record<string, unknown>
 

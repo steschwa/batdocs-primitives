@@ -1,5 +1,5 @@
 {
-    "name": "@steschwa/compose-refs",
+    "name": "@batdocs/compose-refs",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -11,9 +11,13 @@
     ],
     "sideEffects": false,
     "scripts": {
-        "clean": "rm -rf dist"
+        "clean": "rm -rf dist",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts"
     },
     "peerDependencies": {
         "react": "*"
+    },
+    "devDependencies": {
+        "tsup": "^6.2.3"
     }
 }

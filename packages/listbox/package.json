@@ -1,5 +1,5 @@
 {
-    "name": "@steschwa/listbox",
+    "name": "@batdocs/listbox",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -11,17 +11,21 @@
     ],
     "sideEffects": false,
     "scripts": {
-        "clean": "rm -rf dist"
+        "clean": "rm -rf dist",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts --metafile"
     },
     "dependencies": {
-        "@radix-ui/react-slot": "^1.0.0",
-        "@steschwa/collection": "workspace:*",
-        "@steschwa/compose-event-handlers": "workspace:*",
-        "@steschwa/focus": "workspace:*",
-        "@steschwa/use-controllable-state": "workspace:*"
+        "@batdocs/collection": "workspace:*",
+        "@batdocs/compose-event-handlers": "workspace:*",
+        "@batdocs/focus": "workspace:*",
+        "@batdocs/use-controllable-state": "workspace:*",
+        "@radix-ui/react-slot": "^1.0.0"
     },
     "peerDependencies": {
         "react": "*",
         "react-dom": "*"
+    },
+    "devDependencies": {
+        "tsup": "^6.2.3"
     }
 }

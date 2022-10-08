@@ -1,5 +1,5 @@
 {
-    "name": "@steschwa/use-callback-ref",
+    "name": "@batdocs/use-callback-ref",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -10,7 +10,14 @@
         "README.md"
     ],
     "sideEffects": false,
+    "scripts": {
+        "clean": "rm -rf dist",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts"
+    },
     "peerDependencies": {
         "react": "*"
+    },
+    "devDependencies": {
+        "tsup": "^6.2.3"
     }
 }

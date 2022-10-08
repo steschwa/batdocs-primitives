@@ -1,4 +1,4 @@
-import { CollectionItem } from "@steschwa/collection"
+import { CollectionItem } from "@batdocs/collection"
 
 export type ItemData = {
     value: string

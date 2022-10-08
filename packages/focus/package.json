@@ -1,5 +1,5 @@
 {
-    "name": "@steschwa/focus",
+    "name": "@batdocs/focus",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -9,5 +9,12 @@
         "dist",
         "README.md"
     ],
-    "sideEffects": false
+    "sideEffects": false,
+    "scripts": {
+        "clean": "rm -rf dist",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts"
+    },
+    "devDependencies": {
+        "tsup": "^6.2.3"
+    }
 }
