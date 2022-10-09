@@ -17,7 +17,7 @@
         "publish": "yarn workspaces foreach run publish",
         "version:patch": "yarn workspaces foreach --exclude primitives version patch",
         "version:minor": "yarn workspaces foreach --exclude primitives version minor",
-        "version:major": "yarn workspaces foreach --exclude primitives version major",
+        "version:major": "yarn workspaces foreach --exclude primitives version major"
     },
     "dependencies": {
         "react": "^18.2.0",

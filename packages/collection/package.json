@@ -1,6 +1,6 @@
 {
     "name": "@batdocs/collection",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
