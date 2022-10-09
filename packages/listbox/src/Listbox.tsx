@@ -82,6 +82,15 @@ export function Content(props: ContentProps) {
 
                 setValues(produceToggleValue(values, item.value))
             }
+        } else if ((event.metaKey || event.ctrlKey) && event.key === "a") {
+            const allValues = getItems().map(item => {
+                return item.value
+            })
+            if (allValues.length === values.length) {
+                setValues([])
+            } else {
+                setValues(allValues)
+            }
         } else if (event.key.length === 1) {
             setSearch(prev => `${prev}${event.key}`)
         }
