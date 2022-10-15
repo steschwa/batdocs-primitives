@@ -1,14 +1,14 @@
-import { Slot } from "@radix-ui/react-slot"
 import { createCollection } from "@batdocs/collection"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { getFirstFocusable, saveFocus } from "@batdocs/focus"
 import { useControllableState } from "@batdocs/use-controllable-state"
+import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
 import {
     ListboxContext,
     ListboxItemContext,
     useListboxContext,
-    useListboxItemContext,
+    useListboxItemContext
 } from "./Listbox.context"
 import { ItemData } from "./Listbox.types"
 import { produceToggleValue } from "./Listbox.utils"
@@ -43,16 +43,11 @@ export function Content(props: ContentProps) {
     const { values, setValues } = useListboxContext()
     const { getItems } = useCollection()
 
-    const { setSearch, clearTypeaheadSearch } = useTypeaheadSearch(getItems)
-
-    React.useEffect(() => {
-        return () => {
-            clearTypeaheadSearch()
-        }
-    }, [clearTypeaheadSearch])
+    const { setSearch } = useTypeaheadSearch(getItems)
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (["ArrowUp", "ArrowDown"].includes(event.code)) {
+            event.preventDefault()
             const items = getItems()
             let candidateNodes = items
                 .map(item => {
@@ -93,6 +88,7 @@ export function Content(props: ContentProps) {
                 setValues(allValues)
             }
         } else if (event.key.length === 1) {
+            event.preventDefault()
             setSearch(prev => `${prev}${event.key}`)
         }
     }

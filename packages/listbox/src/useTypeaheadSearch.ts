@@ -4,7 +4,6 @@ import { ListboxCollectionItem } from "./Listbox.types"
 
 type UseTypeaheadSearchReturn = {
     setSearch: React.Dispatch<React.SetStateAction<string>>
-    clearTypeaheadSearch: () => void
 }
 
 export function useTypeaheadSearch(getItemsFn: GetItemsFn): UseTypeaheadSearchReturn {
@@ -53,13 +52,7 @@ export function useTypeaheadSearch(getItemsFn: GetItemsFn): UseTypeaheadSearchRe
         }
     }
 
-    const clearTypeaheadSearch = React.useCallback(() => {
-        if (timeout.current !== undefined) {
-            clearTimeout(timeout.current)
-        }
-    }, [])
-
-    return { setSearch, clearTypeaheadSearch }
+    return { setSearch }
 }
 
 type GetItemsFn = () => ListboxCollectionItem[]
