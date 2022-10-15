@@ -56,7 +56,7 @@ export function createCollection<ItemElement extends HTMLElement, ItemData = Obj
      * CollectionItem
      ** ---------------------------------------------------------------------------------------------*/
 
-    const ITEMS_DATA_ATTRIBUTE = "data-grid-list-collection-item"
+    const ITEMS_DATA_ATTRIBUTE = "data-bd-collection-item"
 
     const CollectionItemSlot = React.forwardRef<ItemElement, CollectionItemSlotProps<ItemData>>(
         (props, forwardedRef) => {
