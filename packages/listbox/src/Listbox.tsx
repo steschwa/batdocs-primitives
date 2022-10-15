@@ -83,6 +83,7 @@ export function Content(props: ContentProps) {
                 setValues(produceToggleValue(values, item.value))
             }
         } else if ((event.metaKey || event.ctrlKey) && event.key === "a") {
+            event.preventDefault()
             const allValues = getItems().map(item => {
                 return item.value
             })
