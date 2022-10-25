@@ -8,7 +8,7 @@ import {
     ListboxContext,
     ListboxItemContext,
     useListboxContext,
-    useListboxItemContext
+    useListboxItemContext,
 } from "./Listbox.context"
 import { ItemData } from "./Listbox.types"
 import { produceToggleValue } from "./Listbox.utils"
@@ -40,11 +40,33 @@ export function Root(props: RootProps) {
 
 export type ContentProps = React.ComponentPropsWithoutRef<"div">
 export function Content(props: ContentProps) {
+    const ref = React.useRef<HTMLDivElement>(null)
+
     const { values, setValues } = useListboxContext()
     const { getItems } = useCollection()
 
     const { setSearch } = useTypeaheadSearch(getItems)
 
+    const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+        if (event.target !== ref.current) {
+            return
+        }
+
+        const items = getItems()
+
+        const firstSelectedItem = items.find(item => {
+            return values.includes(item.value)
+        })
+
+        if (firstSelectedItem) {
+            saveFocus(firstSelectedItem.ref.current)
+        } else {
+            const firstItem = items[0]
+            if (firstItem) {
+                saveFocus(firstItem.ref.current)
+            }
+        }
+    }
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (["ArrowUp", "ArrowDown"].includes(event.code)) {
             event.preventDefault()
@@ -94,7 +116,7 @@ export function Content(props: ContentProps) {
     }
 
     return (
-        <Collection.Slot>
+        <Collection.Slot ref={ref}>
             <div
                 {...props}
                 aria-label={props["aria-label"] || "Select values"}
@@ -102,6 +124,7 @@ export function Content(props: ContentProps) {
                 aria-multiselectable="true"
                 tabIndex={0}
                 onKeyDown={composeEventHandlers(props.onKeyDown, handleKeyDown)}
+                onFocus={composeEventHandlers(props.onFocus, handleFocus)}
             />
         </Collection.Slot>
     )
