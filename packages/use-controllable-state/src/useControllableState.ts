@@ -1,7 +1,7 @@
 import { useCallbackRef } from "@batdocs/use-callback-ref"
 import * as React from "react"
 
-type UseControllableStateParams<T> = {
+export type UseControllableStateParams<T> = {
     value?: T | undefined
     defaultValue?: T | undefined
     onChange?: (state: T) => void
