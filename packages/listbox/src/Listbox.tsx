@@ -1,5 +1,6 @@
 import { createCollection } from "@batdocs/collection"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
+import { useComposedRefs } from "@batdocs/compose-refs"
 import { getFirstFocusable, saveFocus } from "@batdocs/focus"
 import { useControllableState } from "@batdocs/use-controllable-state"
 import { Slot } from "@radix-ui/react-slot"
@@ -39,8 +40,9 @@ export function Root(props: RootProps) {
 }
 
 export type ContentProps = React.ComponentPropsWithoutRef<"div">
-export function Content(props: ContentProps) {
+export const Content = React.forwardRef<HTMLDivElement, ContentProps>((props, forwardedRef) => {
     const ref = React.useRef<HTMLDivElement>(null)
+    const composedRef = useComposedRefs(ref, forwardedRef)
 
     const { values, setValues } = useListboxContext()
     const { getItems } = useCollection()
@@ -116,7 +118,7 @@ export function Content(props: ContentProps) {
     }
 
     return (
-        <Collection.Slot ref={ref}>
+        <Collection.Slot ref={composedRef}>
             <div
                 {...props}
                 aria-label={props["aria-label"] || "Select values"}
@@ -128,7 +130,7 @@ export function Content(props: ContentProps) {
             />
         </Collection.Slot>
     )
-}
+})
 
 type ItemOwnProps = {
     value: string
