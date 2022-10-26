@@ -1,0 +1,25 @@
+{
+    "name": "@batdocs/compose-styles",
+    "version": "0.0.0",
+    "packageManager": "yarn@3.2.4",
+    "source": "src/index.ts",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "clean": "rm -rf dist",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts --metafile",
+        "publish": "yarn npm publish --access public --tolerate-republish"
+    },
+    "peerDependencies": {
+        "react": "*"
+    },
+    "devDependencies": {
+        "tsup": "^6.2.3"
+    }
+}
