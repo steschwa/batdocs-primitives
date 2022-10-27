@@ -18,13 +18,13 @@
     },
     "dependencies": {
         "@batdocs/compose-refs": "workspace:*",
-        "@radix-ui/react-slot": "^1.0.0"
+        "@radix-ui/react-slot": "^1.0.1"
     },
     "peerDependencies": {
         "react": "*",
         "react-dom": "*"
     },
     "devDependencies": {
-        "tsup": "^6.2.3"
+        "tsup": "^6.3.0"
     }
 }

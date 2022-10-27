@@ -23,6 +23,6 @@
         "react": "*"
     },
     "devDependencies": {
-        "tsup": "^6.2.3"
+        "tsup": "^6.3.0"
     }
 }
