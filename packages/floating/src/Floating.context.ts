@@ -6,9 +6,6 @@ type FloatingContextProps = {
     //
     trigger: HTMLElement | null
     setTrigger: (element: HTMLElement | null) => void
-    //
-    content: HTMLElement | null
-    setContent: (element: HTMLElement | null) => void
 }
 export const FloatingContext = createContext<FloatingContextProps>({
     open: false,
@@ -16,9 +13,6 @@ export const FloatingContext = createContext<FloatingContextProps>({
     //
     trigger: null,
     setTrigger: noop,
-    //
-    content: null,
-    setContent: noop,
 })
 export function useFloatingContext() {
     return useContext(FloatingContext)

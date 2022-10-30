@@ -24,8 +24,7 @@
         "@batdocs/use-controllable-state": "workspace:*",
         "@floating-ui/react-dom": "^1.0.0",
         "@radix-ui/react-portal": "^1.0.1",
-        "@radix-ui/react-slot": "^1.0.1",
-        "@react-aria/focus": "^3.9.0"
+        "@radix-ui/react-slot": "^1.0.1"
     },
     "peerDependencies": {
         "react": "*",
