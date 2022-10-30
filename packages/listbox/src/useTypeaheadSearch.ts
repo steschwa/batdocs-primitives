@@ -1,4 +1,4 @@
-import { saveFocus } from "@batdocs/focus"
+import { delayFocus } from "@batdocs/focus"
 import * as React from "react"
 import { ListboxCollectionItem } from "./Listbox.types"
 
@@ -48,7 +48,7 @@ export function useTypeaheadSearch(getItemsFn: GetItemsFn): UseTypeaheadSearchRe
 
         const nextItem = typeaheadSearch(nextSearch, getItemsFn(), currentFocusedItem)
         if (nextItem) {
-            saveFocus(nextItem.ref.current)
+            delayFocus(nextItem.ref.current)
         }
     }
 
