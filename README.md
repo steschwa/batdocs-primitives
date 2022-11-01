@@ -7,9 +7,11 @@
     * `yarn version:minor`
     * `yarn version:major`
 
-2. Create a release commit **release: bump version to X.X.X**
+2. Create a release commit **release: bump version to X.X.X** and tag **vX.X.X**
 
-3. Build new versions of the packages: `yarn build`
+3. Push changes to version control
 
-4. Publish new packages to NPM: `yarn publish`
+4. Build new versions of the packages: `yarn build`
+
+5. Publish new packages to NPM: `yarn publish`
 
