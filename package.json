@@ -28,20 +28,20 @@
         "@testing-library/react": "^13.4.0",
         "@testing-library/react-hooks": "^8.0.1",
         "@testing-library/user-event": "^14.4.3",
-        "@types/react": "^18.0.23",
-        "@types/react-dom": "^18.0.7",
-        "@typescript-eslint/eslint-plugin": "^5.41.0",
-        "@typescript-eslint/parser": "^5.41.0",
+        "@types/react": "^18.0.24",
+        "@types/react-dom": "^18.0.8",
+        "@typescript-eslint/eslint-plugin": "^5.42.0",
+        "@typescript-eslint/parser": "^5.42.0",
         "eslint": "^8.26.0",
         "eslint-plugin-react": "^7.31.10",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "jsdom": "^20.0.1",
+        "jsdom": "^20.0.2",
         "prettier": "^2.7.1",
         "react-test-renderer": "^18.2.0",
         "tsup": "^6.3.0",
         "typescript": "^4.8.4",
         "vite-tsconfig-paths": "^3.5.2",
-        "vitest": "^0.24.3"
+        "vitest": "^0.24.4"
     },
     "browserslist": "> 0.5%, last 2 versions, not dead"
 }
