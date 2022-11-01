@@ -1,17 +1,18 @@
-import * as React from "react"
-import { useControllableState } from "@batdocs/use-controllable-state"
-import { FloatingContext, useFloatingContext } from "./Floating.context"
-import { Slot, SlotProps } from "@radix-ui/react-slot"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
-import * as PortalPrimitives from "@radix-ui/react-portal"
+import { useComposedRefs } from "@batdocs/compose-refs"
+import { composeStyles } from "@batdocs/compose-styles"
 import { getAllFocusable, getIsFocusedOutside, scopeTab } from "@batdocs/focus"
+import { useCallbackRef } from "@batdocs/use-callback-ref"
+import { useControllableState } from "@batdocs/use-controllable-state"
 import {
-    useFloating,
     offset as offsetMiddleware,
     size as sizeMiddleware,
+    useFloating,
 } from "@floating-ui/react-dom"
-import { composeStyles } from "@batdocs/compose-styles"
-import { useComposedRefs } from "@batdocs/compose-refs"
+import * as PortalPrimitives from "@radix-ui/react-portal"
+import { Slot, SlotProps } from "@radix-ui/react-slot"
+import * as React from "react"
+import { FloatingContext, useFloatingContext } from "./Floating.context"
 
 export type RootProps = {
     open?: boolean
@@ -27,18 +28,7 @@ export function Root(props: RootProps) {
         defaultValue: defaultOpen,
         onChange: onOpenChange,
     })
-    const [previousOpen, setPreviousOpen] = React.useState(open)
     const [trigger, setTrigger] = React.useState<HTMLElement | null>(null)
-
-    React.useEffect(() => {
-        if (open === false && previousOpen === true) {
-            trigger?.focus()
-        }
-
-        if (open !== previousOpen) {
-            setPreviousOpen(open)
-        }
-    }, [open, previousOpen, trigger])
 
     return (
         <FloatingContext.Provider value={{ open, setOpen, trigger, setTrigger }}>
@@ -101,13 +91,49 @@ type ContentOwnProps = {
      * @default true
      */
     fitTrigger?: boolean
+    /**
+     * Event handler called when the floating content opens.
+     * By default this moves focus to the first focusable children (if any).
+     * or the content itself.
+     * Can be prevented with `event.preventDefault()` to force focus of the
+     * content.
+     */
+    onOpenAutoFocus?: (event: Event) => void
+    /**
+     * Event handler called when the floating content closes.
+     * By default this moves focus back to the trigger.
+     * Can be prevented with `event.preventDefault()`
+     */
+    onCloseAutoFocus?: (event: Event) => void
+    /**
+     * Event handler called when the Escape key is down.
+     * By default this closes the floating content.
+     * Can be prevented with `event.preventDefault()`
+     */
+    onEscapeKeyDown?: (event: React.KeyboardEvent) => void
+    /**
+     * Event handler called when focus moves outside of the floating content.
+     * By default this closes the floating content.
+     * Can be prevented with `event.preventDefault()`
+     */
+    onBlurOutside?: (event: React.FocusEvent) => void
 }
 export type ContentProps = ContentOwnProps &
     Omit<React.ComponentPropsWithoutRef<"div">, keyof ContentOwnProps>
 export function Content(props: ContentProps) {
-    const { offset = 0, forceMount = false, fitTrigger = true, ...restProps } = props
+    const {
+        offset = 0,
+        forceMount = false,
+        fitTrigger = true,
+        onOpenAutoFocus,
+        onCloseAutoFocus,
+        onEscapeKeyDown,
+        onBlurOutside,
+        ...restProps
+    } = props
 
     const { open, setOpen, trigger } = useFloatingContext()
+    const [previousOpen, setPreviousOpen] = React.useState(false)
 
     const ref = React.useRef<HTMLDivElement>(null)
     const { reference, floating, x, y } = useFloating({
@@ -128,43 +154,66 @@ export function Content(props: ContentProps) {
         reference(trigger)
     }, [reference, trigger])
 
+    const latestOnOpenAutoFocus = useCallbackRef(onOpenAutoFocus)
+    const latestOnCloseAutoFocus = useCallbackRef(onCloseAutoFocus)
+
     React.useEffect(() => {
-        if (!open) {
-            return
+        if (!open && previousOpen) {
+            const event = new Event("onCloseAutoFocus", {
+                cancelable: true,
+            })
+            latestOnCloseAutoFocus(event)
+
+            if (!event.defaultPrevented) {
+                trigger?.focus({ preventScroll: true })
+            }
+        } else if (open && !previousOpen) {
+            requestAnimationFrame(() => {
+                if (!ref.current) {
+                    return
+                }
+
+                const event = new Event("onOpenAutoFocus", {
+                    cancelable: true,
+                })
+                latestOnOpenAutoFocus(event)
+
+                const focusableChildren = getAllFocusable(ref.current)
+                if (focusableChildren.length === 0 || event.defaultPrevented) {
+                    ref.current.focus()
+                    return
+                }
+
+                if (!event.defaultPrevented) {
+                    focusableChildren[0].focus()
+                }
+            })
         }
 
-        requestAnimationFrame(() => {
-            if (!ref.current) {
-                return
-            }
-            const focusableChildren = getAllFocusable(ref.current)
-            if (focusableChildren.length === 0) {
-                ref.current.focus()
-                return
-            }
-
-            focusableChildren[0].focus()
-        })
-    }, [open])
+        if (open !== previousOpen) {
+            setPreviousOpen(open)
+        }
+    }, [open, previousOpen, trigger, latestOnOpenAutoFocus, latestOnCloseAutoFocus])
 
     if (!open && !forceMount) {
         return null
     }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        // TODO maybe separate the actions of "Escape" and "Tab" with custom handlers like Radix
         if (event.isDefaultPrevented()) {
             return
         }
 
         if (event.code === "Escape") {
-            setOpen(false)
-            return
+            onEscapeKeyDown?.(event)
+
+            if (!event.isDefaultPrevented()) {
+                setOpen(false)
+            }
         }
 
         if (event.code === "Tab" && ref.current) {
             scopeTab(ref.current, event.nativeEvent as KeyboardEvent)
-            return
         }
     }
     const handleBlur = (event: React.FocusEvent) => {
@@ -176,7 +225,10 @@ export function Content(props: ContentProps) {
             return
         }
         if (getIsFocusedOutside(ref.current, event.nativeEvent as FocusEvent)) {
-            setOpen(false)
+            onBlurOutside?.(event)
+            if (!event.isDefaultPrevented()) {
+                setOpen(false)
+            }
         }
     }
 
