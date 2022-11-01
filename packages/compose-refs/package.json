@@ -1,6 +1,6 @@
 {
     "name": "@batdocs/compose-refs",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",

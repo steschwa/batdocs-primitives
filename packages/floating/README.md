@@ -5,4 +5,3 @@
 ```sh
 yarn add @batdocs/floating
 ```
-
