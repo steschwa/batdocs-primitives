@@ -2,6 +2,10 @@
     "name": "@batdocs/compose-styles",
     "version": "1.1.0",
     "packageManager": "yarn@3.2.4",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/steschwa/batdocs-primitives.git"
+    },
     "source": "src/index.ts",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
