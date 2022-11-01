@@ -16,9 +16,3 @@ export function getFirstFocusable<T extends HTMLElement>(candidates: Array<T | n
 
     return null
 }
-
-export function saveFocus(element: HTMLElement | null, focusOptions?: FocusOptions) {
-    setTimeout(() => {
-        element?.focus(focusOptions)
-    })
-}

@@ -1,6 +1,6 @@
 {
-    "name": "@batdocs/collection",
-    "version": "0.3.0",
+    "name": "@batdocs/compose-styles",
+    "version": "0.0.0",
     "packageManager": "yarn@3.2.4",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -13,16 +13,11 @@
     "sideEffects": false,
     "scripts": {
         "clean": "rm -rf dist",
-        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts --metafile",
         "publish": "yarn npm publish --access public --tolerate-republish"
     },
-    "dependencies": {
-        "@batdocs/compose-refs": "workspace:*",
-        "@radix-ui/react-slot": "^1.0.1"
-    },
     "peerDependencies": {
-        "react": "*",
-        "react-dom": "*"
+        "react": "*"
     },
     "devDependencies": {
         "tsup": "^6.3.0"

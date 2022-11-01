@@ -1,7 +1,7 @@
 import { createCollection } from "@batdocs/collection"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
-import { getFirstFocusable, saveFocus } from "@batdocs/focus"
+import { getFirstFocusable, delayFocus } from "@batdocs/focus"
 import { useControllableState } from "@batdocs/use-controllable-state"
 import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
@@ -61,11 +61,11 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>((props, fo
         })
 
         if (firstSelectedItem) {
-            saveFocus(firstSelectedItem.ref.current)
+            delayFocus(firstSelectedItem.ref.current)
         } else {
             const firstItem = items[0]
             if (firstItem) {
-                saveFocus(firstItem.ref.current)
+                delayFocus(firstItem.ref.current)
             }
         }
     }
@@ -88,7 +88,7 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>((props, fo
             candidateNodes = candidateNodes.slice(currentIndex + 1)
 
             const focusable = getFirstFocusable(candidateNodes)
-            saveFocus(focusable)
+            delayFocus(focusable)
 
             if (event.shiftKey && focusable !== null) {
                 const item = items.find(item => {

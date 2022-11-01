@@ -5,10 +5,12 @@
             "@batdocs/use-controllable-state": ["./packages/use-controllable-state/src"],
             "@batdocs/use-callback-ref": ["./packages/use-callback-ref/src"],
             "@batdocs/compose-refs": ["./packages/compose-refs/src"],
+            "@batdocs/compose-styles": ["./packages/compose-styles/src"],
             "@batdocs/compose-event-handlers": ["./packages/compose-event-handlers/src"],
             "@batdocs/focus": ["./packages/focus/src"],
             "@batdocs/collection": ["./packages/collection/src"],
-            "@batdocs/listbox": ["./packages/listbox/src"]
+            "@batdocs/listbox": ["./packages/listbox/src"],
+            "@batdocs/floating": ["./packages/floating/src"]
         }
     }
 }
