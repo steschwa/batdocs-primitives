@@ -1,5 +1,5 @@
 {
-    "name": "primitives",
+    "name": "@batdocs/primitives",
     "version": "0.0.0",
     "description": "Extend Radiux UI with custom primitives",
     "license": "MIT",
