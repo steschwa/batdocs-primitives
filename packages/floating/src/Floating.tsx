@@ -1,18 +1,14 @@
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
 import { composeStyles } from "@batdocs/compose-styles"
-import { getAllFocusable, getIsFocusedOutside, scopeTab } from "@batdocs/focus"
+import { delayFocus, getAllFocusable, useFocusOutside, useTrapFocus } from "@batdocs/focus"
 import { useCallbackRef } from "@batdocs/use-callback-ref"
 import { useControllableState } from "@batdocs/use-controllable-state"
-import {
-    offset as offsetMiddleware,
-    size as sizeMiddleware,
-    useFloating,
-} from "@floating-ui/react-dom"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import * as React from "react"
 import { FloatingContext, useFloatingContext } from "./Floating.context"
+import { useFloatingPlacement } from "./useFloatingPlacement"
 
 export type RootProps = {
     open?: boolean
@@ -136,43 +132,45 @@ export function Content(props: ContentProps) {
     const [previousOpen, setPreviousOpen] = React.useState(false)
 
     const ref = React.useRef<HTMLDivElement>(null)
-    const { reference, floating, x, y } = useFloating({
-        middleware: [
-            offsetMiddleware(offset),
-            sizeMiddleware({
-                apply: ({ rects, elements }) => {
-                    Object.assign(elements.floating.style, {
-                        width: fitTrigger ? `${rects.reference.width}px` : "max-content",
-                    })
-                },
-            }),
-        ],
+    const { ref: floatingRef, styles: floatingStyles } = useFloatingPlacement({
+        offset,
+        fitTrigger,
     })
-    const composedRef = useComposedRefs<HTMLDivElement | null>(floating, ref)
 
-    React.useLayoutEffect(() => {
-        reference(trigger)
-    }, [reference, trigger])
+    const { ref: trapFocusRef, onKeyDown: trapFocusKeyDown } = useTrapFocus()
+    const { ref: focusOutsideRef, onBlur: focusOutsideBlur } = useFocusOutside({
+        onBlurOutside: event => {
+            onBlurOutside?.(event)
+            if (!event.isDefaultPrevented()) {
+                setOpen(false)
+            }
+        },
+    })
+
+    const composedRef = useComposedRefs<HTMLDivElement | null>(
+        ref,
+        floatingRef,
+        trapFocusRef,
+        focusOutsideRef,
+    )
 
     const latestOnOpenAutoFocus = useCallbackRef(onOpenAutoFocus)
     const latestOnCloseAutoFocus = useCallbackRef(onCloseAutoFocus)
 
     React.useEffect(() => {
         if (!open && previousOpen) {
-            const event = new Event("onCloseAutoFocus", {
-                cancelable: true,
-            })
-            latestOnCloseAutoFocus(event)
+            computed(() => {
+                const event = new Event("onCloseAutoFocus", {
+                    cancelable: true,
+                })
+                latestOnCloseAutoFocus(event)
 
-            if (!event.defaultPrevented) {
-                trigger?.focus({ preventScroll: true })
-            }
-        } else if (open && !previousOpen) {
-            requestAnimationFrame(() => {
-                if (!ref.current) {
-                    return
+                if (!event.defaultPrevented) {
+                    trigger?.focus({ preventScroll: true })
                 }
-
+            })
+        } else if (open && !previousOpen) {
+            computed(() => {
                 const event = new Event("onOpenAutoFocus", {
                     cancelable: true,
                 })
@@ -180,12 +178,12 @@ export function Content(props: ContentProps) {
 
                 const focusableChildren = getAllFocusable(ref.current)
                 if (focusableChildren.length === 0 || event.defaultPrevented) {
-                    ref.current.focus()
+                    delayFocus(ref.current)
                     return
                 }
 
                 if (!event.defaultPrevented) {
-                    focusableChildren[0].focus()
+                    delayFocus(focusableChildren[0])
                 }
             })
         }
@@ -200,32 +198,9 @@ export function Content(props: ContentProps) {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.isDefaultPrevented()) {
-            return
-        }
-
         if (event.code === "Escape") {
             onEscapeKeyDown?.(event)
 
-            if (!event.isDefaultPrevented()) {
-                setOpen(false)
-            }
-        }
-
-        if (event.code === "Tab" && ref.current) {
-            scopeTab(ref.current, event.nativeEvent as KeyboardEvent)
-        }
-    }
-    const handleBlur = (event: React.FocusEvent) => {
-        if (event.isDefaultPrevented()) {
-            return
-        }
-
-        if (!ref.current) {
-            return
-        }
-        if (getIsFocusedOutside(ref.current, event.nativeEvent as FocusEvent)) {
-            onBlurOutside?.(event)
             if (!event.isDefaultPrevented()) {
                 setOpen(false)
             }
@@ -238,13 +213,13 @@ export function Content(props: ContentProps) {
             ref={composedRef}
             data-open={open}
             tabIndex={-1}
-            onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
-            onBlur={composeEventHandlers(restProps.onBlur, handleBlur)}
-            style={composeStyles(restProps.style, {
-                position: "absolute",
-                left: x ?? 0,
-                top: y ?? 0,
-            })}
+            onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown, trapFocusKeyDown)}
+            onBlur={composeEventHandlers(restProps.onBlur, focusOutsideBlur)}
+            style={composeStyles(restProps.style, floatingStyles)}
         />
     )
+}
+
+function computed<T>(fn: () => T): T {
+    return fn()
 }
