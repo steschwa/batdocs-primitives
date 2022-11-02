@@ -1,6 +1,5 @@
 export { delayFocus } from "./delayFocus"
 export { getAllFocusable } from "./getAllFocusable"
-export { getFirstFocusable } from "./getFirstFocusable"
 export { useTrapFocus } from "./useTrapFocus"
 export { useFocusOutside } from "./useFocusOutside"
 

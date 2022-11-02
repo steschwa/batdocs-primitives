@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect } from "react"
 import * as Listbox from "./index"
 
 function useLoadTailwind() {
@@ -28,79 +28,27 @@ const items = [
     { value: "leek", label: "Leek" },
 ]
 
-export const Default = () => (
-    <Listbox.Root>
-        <Listbox.Content>
-            {items.map(item => (
-                <Listbox.Item key={item.value} value={item.value} text={item.label}>
-                    <Listbox.Indicator asChild>
-                        <span style={{ marginRight: "1rem" }}>X</span>
-                    </Listbox.Indicator>
-                    {item.label}
-                </Listbox.Item>
-            ))}
-        </Listbox.Content>
-    </Listbox.Root>
-)
-
-export const InDropdown = () => {
+export const Default = () => {
     useLoadTailwind()
 
-    const triggerRef = useRef<HTMLButtonElement>(null)
-    const [open, setOpen] = useState(false)
-
-    const contentRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        if (!open) {
-            return
-        }
-
-        setTimeout(() => {
-            contentRef.current?.focus({ preventScroll: true })
-        })
-    }, [open])
-
-    const bounds = triggerRef.current?.getBoundingClientRect()
-    const { bottom, left, width } = bounds ?? { bottom: 0, left: 0, width: 0 }
-
-    const transform = `translateX(-${(200 - width) / 2}px)`
-
     return (
-        <div className="flex justify-center" style={{ marginTop: "90vh" }}>
-            <button
-                ref={triggerRef}
-                onClick={() => setOpen(p => !p)}
-                className="px-4 h-8 border border-solid border-gray-200 focus:outline-none focus-visible:ring ring-gray-400">
-                Select
-            </button>
-
-            {open && (
-                <Listbox.Root>
-                    <Listbox.Content
-                        ref={contentRef}
-                        className="absolute bg-gray-50 p-2"
-                        style={{
-                            top: bottom,
-                            left,
-                            width: 200,
-                            transform,
-                        }}>
-                        {items.map(item => (
-                            <Listbox.Item
-                                key={item.value}
-                                value={item.value}
-                                text={item.label}
-                                className="px-2 py-1 flex justify-between items-center focus:bg-gray-100 cursor-default focus:outline-none focus-visible:ring-1 ring-blue-400">
-                                {item.label}
-                                <Listbox.Indicator asChild>
-                                    <span style={{ marginRight: "1rem" }}>X</span>
-                                </Listbox.Indicator>
-                            </Listbox.Item>
-                        ))}
-                    </Listbox.Content>
-                </Listbox.Root>
-            )}
-        </div>
+        <Listbox.Root>
+            <Listbox.Content className="w-96 bg-gray-50 rounded-sm p-2 focus:outline-none flex flex-col gap-y-1">
+                {items.map(item => (
+                    <Listbox.Item
+                        key={item.value}
+                        value={item.value}
+                        text={item.label}
+                        className="rounded focus:bg-blue-50 focus:text-blue-900 focus:outline-none text-gray-700 py-2 pr-4 pl-10 relative cursor-default">
+                        <Listbox.Indicator asChild>
+                            <div className="absolute left-3 top-0 bottom-0 inline-flex items-center">
+                                <div className="rounded-full w-3 h-3 bg-blue-600" />
+                            </div>
+                        </Listbox.Indicator>
+                        {item.label}
+                    </Listbox.Item>
+                ))}
+            </Listbox.Content>
+        </Listbox.Root>
     )
 }

@@ -1,7 +1,7 @@
 import { createCollection } from "@batdocs/collection"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
-import { getFirstFocusable, delayFocus } from "@batdocs/focus"
+import { delayFocus } from "@batdocs/focus"
 import { useControllableState } from "@batdocs/use-controllable-state"
 import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
@@ -9,7 +9,7 @@ import {
     ListboxContext,
     ListboxItemContext,
     useListboxContext,
-    useListboxItemContext,
+    useListboxItemContext
 } from "./Listbox.context"
 import { ItemData } from "./Listbox.types"
 import { produceToggleValue } from "./Listbox.utils"
@@ -87,8 +87,10 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>((props, fo
             const currentIndex = candidateNodes.indexOf(currentItem)
             candidateNodes = candidateNodes.slice(currentIndex + 1)
 
-            const focusable = getFirstFocusable(candidateNodes)
-            delayFocus(focusable)
+            const focusable = candidateNodes[0]
+            if (focusable) {
+                delayFocus(focusable)
+            }
 
             if (event.shiftKey && focusable !== null) {
                 const item = items.find(item => {
