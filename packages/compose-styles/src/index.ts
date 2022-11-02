@@ -1,1 +1,1 @@
-export { composeStyles } from "./style"
+export { composeStyles } from "./composeStyles"
