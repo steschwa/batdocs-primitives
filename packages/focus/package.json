@@ -27,6 +27,7 @@
         "tsup": "^6.3.0"
     },
     "peerDependencies": {
-        "react": "*"
+        "react": "*",
+        "react-dom": "*"
     }
 }
