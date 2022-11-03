@@ -1,5 +1,5 @@
 {
-    "name": "@batdocs/focus-trap",
+    "name": "@batdocs/blur-outside",
     "version": "0.0.0",
     "packageManager": "yarn@3.2.4",
     "repository": {
@@ -23,7 +23,6 @@
     "dependencies": {
         "@batdocs/compose-event-handlers": "workspace:*",
         "@batdocs/compose-refs": "workspace:*",
-        "@batdocs/focus": "workspace:*",
         "@radix-ui/react-slot": "^1.0.1"
     },
     "devDependencies": {

@@ -2,6 +2,7 @@ import * as React from "react"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { getAllFocusable } from "@batdocs/focus"
+import { useComposedRefs } from "@batdocs/compose-refs"
 
 type FocusTrapOwnProps = {
     /**
@@ -10,10 +11,11 @@ type FocusTrapOwnProps = {
     asChild?: boolean
 }
 export type FocusTrapProps = FocusTrapOwnProps & Omit<SlotProps, keyof FocusTrapOwnProps>
-export function FocusTrap(props: FocusTrapProps) {
+export const FocusTrap = React.forwardRef<HTMLElement, FocusTrapProps>((props, forwardedRef) => {
     const { asChild = false, ...restProps } = props
 
     const ref = React.useRef<HTMLElement>(null)
+    const composedRef = useComposedRefs(ref, forwardedRef)
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (!ref.current) {
@@ -29,12 +31,12 @@ export function FocusTrap(props: FocusTrapProps) {
     return (
         <Comp
             {...restProps}
-            ref={ref as never}
+            ref={composedRef as never}
             tabIndex={-1}
             onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
         />
     )
-}
+})
 
 function scopeTab(inside: HTMLElement, event: React.KeyboardEvent) {
     const focusableChildren = getAllFocusable(inside)

@@ -1,12 +1,13 @@
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
 import { composeStyles } from "@batdocs/compose-styles"
-import { delayFocus, getAllFocusable, useFocusOutside } from "@batdocs/focus"
+import { delayFocus, getAllFocusable } from "@batdocs/focus"
 import { FocusTrap } from "@batdocs/focus-trap"
 import { useCallbackRef } from "@batdocs/use-callback-ref"
 import { useControllableState } from "@batdocs/use-controllable-state"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
+import { BlurOutside } from "@batdocs/blur-outside"
 import * as React from "react"
 import { FloatingContext, useFloatingContext } from "./Floating.context"
 import { useFloatingPlacement } from "./useFloatingPlacement"
@@ -137,16 +138,7 @@ export function Content(props: ContentProps) {
         fitTrigger,
     })
 
-    const { ref: focusOutsideRef, onBlur: focusOutsideBlur } = useFocusOutside({
-        onBlurOutside: event => {
-            onBlurOutside?.(event)
-            if (!event.isDefaultPrevented()) {
-                setOpen(false)
-            }
-        },
-    })
-
-    const composedRef = useComposedRefs<HTMLDivElement | null>(ref, floatingRef, focusOutsideRef)
+    const composedRef = useComposedRefs<HTMLDivElement | null>(ref, floatingRef)
 
     const latestOnOpenAutoFocus = useCallbackRef(onOpenAutoFocus)
     const latestOnCloseAutoFocus = useCallbackRef(onCloseAutoFocus)
@@ -200,18 +192,25 @@ export function Content(props: ContentProps) {
             }
         }
     }
+    const handleBlurOutside = (event: React.FocusEvent) => {
+        onBlurOutside?.(event)
+        if (!event.isDefaultPrevented()) {
+            setOpen(false)
+        }
+    }
 
     return (
         <FocusTrap asChild>
-            <div
-                {...restProps}
-                ref={composedRef}
-                data-open={open}
-                tabIndex={-1}
-                onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
-                onBlur={composeEventHandlers(restProps.onBlur, focusOutsideBlur)}
-                style={composeStyles(restProps.style, floatingStyles)}
-            />
+            <BlurOutside asChild onBlurOutside={handleBlurOutside}>
+                <div
+                    {...restProps}
+                    ref={composedRef}
+                    data-open={open}
+                    tabIndex={-1}
+                    onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
+                    style={composeStyles(restProps.style, floatingStyles)}
+                />
+            </BlurOutside>
         </FocusTrap>
     )
 }

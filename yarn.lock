@@ -1389,6 +1389,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@batdocs/blur-outside@workspace:*, @batdocs/blur-outside@workspace:packages/blur-outside":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/blur-outside@workspace:packages/blur-outside"
+  dependencies:
+    "@batdocs/compose-event-handlers": "workspace:*"
+    "@batdocs/compose-refs": "workspace:*"
+    "@radix-ui/react-slot": ^1.0.1
+    tsup: ^6.3.0
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  languageName: unknown
+  linkType: soft
+
 "@batdocs/collection@workspace:*, @batdocs/collection@workspace:packages/collection":
   version: 0.0.0-use.local
   resolution: "@batdocs/collection@workspace:packages/collection"
@@ -1435,8 +1449,8 @@ __metadata:
   resolution: "@batdocs/drawer@workspace:packages/drawer"
   dependencies:
     "@batdocs/compose-event-handlers": "workspace:*"
-    "@batdocs/compose-refs": "workspace:*"
     "@batdocs/focus": "workspace:*"
+    "@batdocs/focus-trap": "workspace:*"
     "@batdocs/use-callback-ref": "workspace:*"
     "@batdocs/use-controllable-state": "workspace:*"
     "@radix-ui/react-portal": ^1.0.1
@@ -1452,10 +1466,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@batdocs/floating@workspace:packages/floating"
   dependencies:
+    "@batdocs/blur-outside": "workspace:*"
     "@batdocs/compose-event-handlers": "workspace:*"
     "@batdocs/compose-refs": "workspace:*"
     "@batdocs/compose-styles": "workspace:*"
     "@batdocs/focus": "workspace:*"
+    "@batdocs/focus-trap": "workspace:*"
     "@batdocs/use-callback-ref": "workspace:*"
     "@batdocs/use-controllable-state": "workspace:*"
     "@floating-ui/react-dom": ^1.0.0
@@ -1468,11 +1484,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@batdocs/focus-trap@workspace:packages/focus-trap":
+"@batdocs/focus-trap@workspace:*, @batdocs/focus-trap@workspace:packages/focus-trap":
   version: 0.0.0-use.local
   resolution: "@batdocs/focus-trap@workspace:packages/focus-trap"
   dependencies:
     "@batdocs/compose-event-handlers": "workspace:*"
+    "@batdocs/compose-refs": "workspace:*"
     "@batdocs/focus": "workspace:*"
     "@radix-ui/react-slot": ^1.0.1
     tsup: ^6.3.0
