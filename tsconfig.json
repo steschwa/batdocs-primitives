@@ -11,7 +11,8 @@
             "@batdocs/focus-trap": ["./packages/focus-trap/src"],
             "@batdocs/collection": ["./packages/collection/src"],
             "@batdocs/listbox": ["./packages/listbox/src"],
-            "@batdocs/floating": ["./packages/floating/src"]
+            "@batdocs/floating": ["./packages/floating/src"],
+            "@batdocs/drawer": ["./packages/drawer/src"]
         }
     }
 }
