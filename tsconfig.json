@@ -8,9 +8,12 @@
             "@batdocs/compose-styles": ["./packages/compose-styles/src"],
             "@batdocs/compose-event-handlers": ["./packages/compose-event-handlers/src"],
             "@batdocs/focus": ["./packages/focus/src"],
+            "@batdocs/focus-trap": ["./packages/focus-trap/src"],
+            "@batdocs/blur-outside": ["./packages/blur-outside/src"],
             "@batdocs/collection": ["./packages/collection/src"],
             "@batdocs/listbox": ["./packages/listbox/src"],
-            "@batdocs/floating": ["./packages/floating/src"]
+            "@batdocs/floating": ["./packages/floating/src"],
+            "@batdocs/drawer": ["./packages/drawer/src"]
         }
     }
 }

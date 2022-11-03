@@ -1,13 +1,20 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, test } from "vitest"
-import { useTrapFocus } from "../useTrapFocus"
+import { FocusTrap } from "../FocusTrap"
 
-describe("useTrapFocus", () => {
+describe("FocusTrap", () => {
     test("should contain focus within", async () => {
         const user = userEvent.setup()
 
-        render(<Wrapper />)
+        render(
+            <FocusTrap asChild>
+                <div>
+                    <input autoFocus placeholder="Input" />
+                    <button>Save</button>
+                </div>
+            </FocusTrap>,
+        )
 
         expect(document.activeElement).toBe(screen.getByPlaceholderText("Input"))
 
@@ -27,7 +34,7 @@ describe("useTrapFocus", () => {
     test("should call preventDefault on event if there are not focusable children", async () => {
         const user = userEvent.setup()
 
-        render(<NoFocusableWrapper />)
+        render(<FocusTrap data-testid="wrapper" />)
 
         screen.getByTestId("wrapper").focus()
 
@@ -37,20 +44,3 @@ describe("useTrapFocus", () => {
         expect(document.activeElement).toBe(screen.getByTestId("wrapper"))
     })
 })
-
-function Wrapper() {
-    const { ref, onKeyDown } = useTrapFocus()
-
-    return (
-        <div ref={ref} onKeyDown={onKeyDown}>
-            <input autoFocus placeholder="Input" />
-            <button>Save</button>
-        </div>
-    )
-}
-
-function NoFocusableWrapper() {
-    const { ref, onKeyDown } = useTrapFocus()
-
-    return <div ref={ref} tabIndex={-1} data-testid="wrapper" onKeyDown={onKeyDown}></div>
-}
