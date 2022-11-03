@@ -13,6 +13,7 @@
         "lint": "eslint packages --ext .ts,.tsx",
         "test": "vitest",
         "coverage": "vitest run --coverage",
+        "coverage:serve": "yarn dlx serve coverage/",
         "clean": "yarn workspaces foreach run clean",
         "build": "yarn workspaces foreach run build",
         "publish": "yarn workspaces foreach run publish",
