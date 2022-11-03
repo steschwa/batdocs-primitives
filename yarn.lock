@@ -1435,6 +1435,9 @@ __metadata:
   resolution: "@batdocs/drawer@workspace:packages/drawer"
   dependencies:
     "@batdocs/compose-event-handlers": "workspace:*"
+    "@batdocs/compose-refs": "workspace:*"
+    "@batdocs/focus": "workspace:*"
+    "@batdocs/use-callback-ref": "workspace:*"
     "@batdocs/use-controllable-state": "workspace:*"
     "@radix-ui/react-portal": ^1.0.1
     "@radix-ui/react-slot": ^1.0.1
@@ -1457,6 +1460,20 @@ __metadata:
     "@batdocs/use-controllable-state": "workspace:*"
     "@floating-ui/react-dom": ^1.0.0
     "@radix-ui/react-portal": ^1.0.1
+    "@radix-ui/react-slot": ^1.0.1
+    tsup: ^6.3.0
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  languageName: unknown
+  linkType: soft
+
+"@batdocs/focus-trap@workspace:packages/focus-trap":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/focus-trap@workspace:packages/focus-trap"
+  dependencies:
+    "@batdocs/compose-event-handlers": "workspace:*"
+    "@batdocs/focus": "workspace:*"
     "@radix-ui/react-slot": ^1.0.1
     tsup: ^6.3.0
   peerDependencies:
