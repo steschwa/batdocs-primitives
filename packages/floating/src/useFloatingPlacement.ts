@@ -34,9 +34,11 @@ export function useFloatingPlacement<T extends HTMLElement>(
             offsetMiddleware(offset),
             sizeMiddleware({
                 apply: ({ rects, elements }) => {
-                    Object.assign(elements.floating.style, {
-                        width: fitTrigger ? `${rects.reference.width}px` : "max-content",
-                    })
+                    if (fitTrigger) {
+                        Object.assign(elements.floating.style, {
+                            width: `${rects.reference.width}px`,
+                        })
+                    }
                 },
             }),
         ],
