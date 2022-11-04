@@ -1,5 +1,7 @@
 # @batdocs/primitives
 
+![ci](https://img.shields.io/github/workflow/status/steschwa/batdocs-primitives/CI?label=CI&logo=github)
+
 ## Release process
 
 1. Version each package based on recent changes (use one of the below commands):
