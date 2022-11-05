@@ -19,6 +19,67 @@ export const Default = () => {
 
     return (
         <div className="p-20 flex items-center flex-col gap-y-4">
+            <button
+                className="focus:ring-2"
+                onClick={() => {
+                    console.log("click")
+                }}>
+                Outer
+            </button>
+
+            <Floating.Root>
+                <Floating.Trigger asChild>
+                    <FloatingTrigger />
+                </Floating.Trigger>
+
+                <Floating.Portal>
+                    <Floating.Content
+                        className="rounded bg-gray-50 shadow border border-solid border-gray-200 outline-none"
+                        offset={5}
+                        fitTrigger={false}>
+                        <FloatingContent />
+                    </Floating.Content>
+                </Floating.Portal>
+            </Floating.Root>
+        </div>
+    )
+}
+
+export const Multiple = () => {
+    useLoadTailwind()
+
+    return (
+        <div className="p-20 flex justify-center items-center gap-x-8">
+            <Floating.Root>
+                <Floating.Trigger asChild>
+                    <FloatingTrigger />
+                </Floating.Trigger>
+
+                <Floating.Portal>
+                    <Floating.Content
+                        className="rounded bg-gray-50 shadow border border-solid border-gray-200 outline-none"
+                        offset={5}
+                        fitTrigger={false}>
+                        <FloatingContent />
+                    </Floating.Content>
+                </Floating.Portal>
+            </Floating.Root>
+
+            <Floating.Root>
+                <Floating.Trigger asChild>
+                    <FloatingTrigger />
+                </Floating.Trigger>
+
+                <Floating.Portal>
+                    <Floating.Content
+                        className="rounded bg-gray-50 shadow border border-solid border-gray-200 outline-none"
+                        offset={5}
+                        fitTrigger={false}>
+                        <FloatingContent />
+                    </Floating.Content>
+                </Floating.Portal>
+            </Floating.Root>
+
             <Floating.Root>
                 <Floating.Trigger asChild>
                     <FloatingTrigger />

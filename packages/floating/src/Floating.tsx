@@ -1,3 +1,4 @@
+import { BlurOutside } from "@batdocs/blur-outside"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
 import { composeStyles } from "@batdocs/compose-styles"
@@ -7,7 +8,6 @@ import { useCallbackRef } from "@batdocs/use-callback-ref"
 import { useControllableState } from "@batdocs/use-controllable-state"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
-import { BlurOutside } from "@batdocs/blur-outside"
 import * as React from "react"
 import { FloatingContext, useFloatingContext } from "./Floating.context"
 import { useFloatingPlacement } from "./useFloatingPlacement"
@@ -56,9 +56,9 @@ export function Trigger(props: TriggerProps) {
             setOpen(true)
         }
     }
-    const handlePointerDown = (event: React.PointerEvent) => {
-        event.preventDefault()
+    const handleClick = (event: React.MouseEvent) => {
         setOpen(true)
+        event.preventDefault()
     }
 
     const Comp = asChild ? Slot : "button"
@@ -67,8 +67,9 @@ export function Trigger(props: TriggerProps) {
         <Comp
             {...restProps}
             ref={setTrigger}
+            data-bd-trigger
             onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
-            onPointerDown={composeEventHandlers(restProps.onPointerDown, handlePointerDown)}
+            onClick={composeEventHandlers(restProps.onClick, handleClick)}
         />
     )
 }
