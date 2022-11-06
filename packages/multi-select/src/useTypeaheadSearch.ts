@@ -12,6 +12,10 @@ export function useTypeaheadSearch(): UseTypeaheadSearchReturn {
     const [search, setInternalSearch] = React.useState("")
     const timeout = React.useRef<NodeJS.Timeout>()
 
+    const getEnabledItems = React.useCallback(() => {
+        return getItems().filter(item => !item.disabled)
+    }, [getItems])
+
     React.useEffect(() => {
         if (search === "") {
             return
@@ -44,11 +48,11 @@ export function useTypeaheadSearch(): UseTypeaheadSearchReturn {
 
         setInternalSearch(nextSearch)
 
-        const currentFocusedItem = getItems().find(item => {
+        const currentFocusedItem = getEnabledItems().find(item => {
             return item.ref.current === document.activeElement
         })
 
-        const nextItem = typeaheadSearch(nextSearch, getItems(), currentFocusedItem)
+        const nextItem = typeaheadSearch(nextSearch, getEnabledItems(), currentFocusedItem)
         if (nextItem) {
             nextItem.ref.current?.focus()
         }

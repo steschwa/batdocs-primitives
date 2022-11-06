@@ -208,6 +208,10 @@ export function Content(props: ContentProps) {
         })
     }, [setOpen, trigger])
 
+    const getEnabledItems = React.useCallback(() => {
+        return getItems().filter(item => !item.disabled)
+    }, [getItems])
+
     React.useEffect(() => {
         if (!initialized) {
             return
@@ -247,7 +251,7 @@ export function Content(props: ContentProps) {
             return
         }
 
-        const items = getItems()
+        const items = getEnabledItems()
         const firstSelectedItem = items.find(item => {
             return values.includes(item.value)
         })
@@ -262,7 +266,7 @@ export function Content(props: ContentProps) {
         }
 
         setInitialized(true)
-    }, [open, getItems, values, initialized])
+    }, [open, getEnabledItems, values, initialized])
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.code === "Tab") {
@@ -270,7 +274,7 @@ export function Content(props: ContentProps) {
         } else if (event.code === "Escape") {
             closeContent()
         } else if (["ArrowUp", "ArrowDown"].includes(event.code)) {
-            const items = getItems()
+            const items = getEnabledItems()
             let candidateNodes = items
                 .map(item => {
                     return item.ref.current
@@ -303,7 +307,7 @@ export function Content(props: ContentProps) {
             }
         } else if ((event.metaKey || event.ctrlKey) && event.key === "a") {
             event.preventDefault()
-            const allValues = getItems().map(item => {
+            const allValues = getEnabledItems().map(item => {
                 return item.value
             })
             if (allValues.length === values.length) {
@@ -344,11 +348,12 @@ export function Content(props: ContentProps) {
 type ItemOwnProps = {
     value: string
     text?: string
+    disabled?: boolean
 }
 export type ItemProps = ItemOwnProps &
     Omit<React.ComponentPropsWithoutRef<"div">, keyof ItemOwnProps>
 export function Item(props: ItemProps) {
-    const { value, text = value, ...restProps } = props
+    const { value, text = value, disabled = false, ...restProps } = props
 
     const { values, setValues } = useMultiSelectContext()
 
@@ -373,11 +378,12 @@ export function Item(props: ItemProps) {
 
     return (
         <MultiSelectItemContext.Provider value={{ selected }}>
-            <Collection.ItemSlot value={value} text={text}>
+            <Collection.ItemSlot value={value} text={text} disabled={disabled}>
                 <div
                     {...restProps}
                     role="option"
                     aria-checked={selected}
+                    data-disabled={disabled}
                     tabIndex={-1}
                     onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
                     onMouseEnter={composeEventHandlers(restProps.onMouseEnter, handleMouseEnter)}
