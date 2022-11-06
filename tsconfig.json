@@ -13,7 +13,8 @@
             "@batdocs/collection": ["./packages/collection/src"],
             "@batdocs/listbox": ["./packages/listbox/src"],
             "@batdocs/floating": ["./packages/floating/src"],
-            "@batdocs/drawer": ["./packages/drawer/src"]
+            "@batdocs/drawer": ["./packages/drawer/src"],
+            "@batdocs/multi-select": ["./packages/multi-select/src"]
         }
     }
 }
