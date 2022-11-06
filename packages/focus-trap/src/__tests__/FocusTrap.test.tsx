@@ -34,7 +34,7 @@ describe("FocusTrap", () => {
     test("should call preventDefault on event if there are not focusable children", async () => {
         const user = userEvent.setup()
 
-        render(<FocusTrap data-testid="wrapper" />)
+        render(<FocusTrap data-testid="wrapper" tabIndex={-1} />)
 
         screen.getByTestId("wrapper").focus()
 
