@@ -18,6 +18,18 @@ export function useDrawerContext() {
     return useContext(DrawerContext)
 }
 
+type DrawerContentContextProps = {
+    close: HTMLElement | null
+    setClose: (element: HTMLElement | null) => void
+}
+export const DrawerContentContext = createContext<DrawerContentContextProps>({
+    close: null,
+    setClose: noop,
+})
+export function useDrawerContentContext() {
+    return useContext(DrawerContentContext)
+}
+
 function noop() {
     return
 }

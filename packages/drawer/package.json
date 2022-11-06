@@ -1,6 +1,6 @@
 {
     "name": "@batdocs/drawer",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "packageManager": "yarn@3.2.4",
     "repository": {
         "type": "git",
@@ -22,9 +22,7 @@
     },
     "dependencies": {
         "@batdocs/compose-event-handlers": "workspace:*",
-        "@batdocs/focus": "workspace:*",
         "@batdocs/focus-trap": "workspace:*",
-        "@batdocs/use-callback-ref": "workspace:*",
         "@batdocs/use-controllable-state": "workspace:*",
         "@radix-ui/react-portal": "^1.0.1",
         "@radix-ui/react-slot": "^1.0.1"

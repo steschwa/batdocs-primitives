@@ -1,17 +1,21 @@
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
-import { delayFocus } from "@batdocs/focus"
 import { FocusTrap } from "@batdocs/focus-trap"
-import { useCallbackRef } from "@batdocs/use-callback-ref"
 import { useControllableState } from "@batdocs/use-controllable-state"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import * as React from "react"
-import { DrawerContext, useDrawerContext } from "./Drawer.context"
+import {
+    DrawerContentContext,
+    DrawerContext,
+    useDrawerContext,
+    useDrawerContentContext,
+} from "./Drawer.context"
 
 export type RootProps = {
     open?: boolean
     defaultOpen?: boolean
     onOpenChange?: (open: boolean) => void
+    //
     children: React.ReactNode
 }
 export function Root(props: RootProps) {
@@ -22,6 +26,7 @@ export function Root(props: RootProps) {
         defaultValue: defaultOpen,
         onChange: onOpenChange,
     })
+
     const [trigger, setTrigger] = React.useState<HTMLElement | null>(null)
 
     return (
@@ -93,42 +98,45 @@ export function Overlay(props: OverlayProps) {
 }
 
 type ContentOwnProps = {
-    side: ContentSide
     /**
      * @default false
      */
     forceMount?: boolean
-    /**
-     * Event handler called when the Escape key is down.
-     * By default this closes the drawer.
-     * Can be prevented with `event.preventDefault()`
-     */
-    onEscapeKeyDown?: (event: React.KeyboardEvent) => void
-    /**
-     * Event handler called when a pointer event is fired outside the content.
-     * By default this closes the drawer.
-     * Can be prevented with `event.preventDefault()`
-     */
-    onPointerDownOutside?: (event: MouseEvent) => void
 }
 export type ContentProps = ContentOwnProps &
     Omit<React.ComponentPropsWithoutRef<"div">, keyof ContentOwnProps>
 export function Content(props: ContentProps) {
-    const { side, forceMount = false, onEscapeKeyDown, onPointerDownOutside, ...restProps } = props
+    const { forceMount = false, ...restProps } = props
 
     const { open, setOpen, trigger } = useDrawerContext()
+
+    const [close, setClose] = React.useState<HTMLElement | null>(null)
+
     const [previousOpen, setPreviousOpen] = React.useState(false)
+    const [initialized, setInitialized] = React.useState(false)
+    if (!open && initialized) {
+        setInitialized(false)
+    }
 
     const ref = React.useRef<HTMLDivElement>(null)
-
-    const latestOnPointerDownOutside = useCallbackRef(onPointerDownOutside)
 
     React.useEffect(() => {
         if (!open) {
             return
         }
+        setInitialized(true)
+    }, [open])
 
-        const clickHandler = (event: PointerEvent) => {
+    React.useEffect(() => {
+        /**
+         * Delay setup of event handlers by one render to
+         * prevent closing the content if opened by a pointer
+         */
+        if (!initialized) {
+            return
+        }
+
+        const pointerDownHandler = (event: PointerEvent) => {
             if (!ref.current) {
                 return
             }
@@ -137,39 +145,35 @@ export function Content(props: ContentProps) {
             }
 
             if (event.target !== ref.current && !ref.current.contains(event.target)) {
-                latestOnPointerDownOutside(event)
-
-                if (!event.defaultPrevented) {
-                    setOpen(false)
-                }
+                setOpen(false)
             }
         }
 
-        document.addEventListener("pointerdown", clickHandler)
+        document.addEventListener("pointerdown", pointerDownHandler)
         return () => {
-            document.removeEventListener("pointerdown", clickHandler)
+            document.removeEventListener("pointerdown", pointerDownHandler)
         }
-    }, [open, setOpen, latestOnPointerDownOutside])
+    }, [initialized, setOpen])
 
     React.useEffect(() => {
         if (!open && previousOpen) {
-            delayFocus(trigger, { preventScroll: true })
+            setTimeout(() => {
+                trigger?.focus({ preventScroll: true })
+            })
         } else if (open && !previousOpen) {
-            delayFocus(ref.current)
+            setTimeout(() => {
+                close?.focus({ preventScroll: true })
+            })
         }
 
         if (open !== previousOpen) {
             setPreviousOpen(open)
         }
-    }, [open, previousOpen, trigger])
+    }, [open, previousOpen, trigger, close])
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.code === "Escape") {
-            onEscapeKeyDown?.(event)
-
-            if (!event.isDefaultPrevented()) {
-                setOpen(false)
-            }
+            setOpen(false)
         }
     }
 
@@ -178,19 +182,19 @@ export function Content(props: ContentProps) {
     }
 
     return (
-        <FocusTrap asChild>
-            <div
-                {...restProps}
-                ref={ref}
-                tabIndex={-1}
-                data-side={side}
-                data-open={open}
-                onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
-            />
-        </FocusTrap>
+        <DrawerContentContext.Provider value={{ close, setClose }}>
+            <FocusTrap asChild>
+                <div
+                    {...restProps}
+                    ref={ref}
+                    tabIndex={-1}
+                    data-open={open}
+                    onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
+                />
+            </FocusTrap>
+        </DrawerContentContext.Provider>
     )
 }
-type ContentSide = "right" | "left"
 
 type CloseOwnProps = {
     /**
@@ -203,6 +207,7 @@ export function Close(props: CloseProps) {
     const { asChild = false, ...restProps } = props
 
     const { setOpen } = useDrawerContext()
+    const { setClose } = useDrawerContentContext()
 
     const handleClick = () => {
         setOpen(false)
@@ -210,5 +215,11 @@ export function Close(props: CloseProps) {
 
     const Comp = asChild ? Slot : "button"
 
-    return <Comp {...restProps} onClick={composeEventHandlers(restProps.onClick, handleClick)} />
+    return (
+        <Comp
+            {...restProps}
+            ref={setClose}
+            onClick={composeEventHandlers(restProps.onClick, handleClick)}
+        />
+    )
 }
