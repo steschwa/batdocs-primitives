@@ -252,3 +252,40 @@ export const LongItems = () => {
         </MultiSelect.Root>
     )
 }
+
+export const WithLabel = () => {
+    useLoadTailwind()
+
+    return (
+        <fieldset>
+            <label htmlFor="food">Select a food</label>
+            <MultiSelect.Root>
+                <MultiSelect.Trigger
+                    id="food"
+                    className="h-10 px-4 flex justify-between items-center gap-x-3 shadow-sm bg-white rounded border border-solid border-gray-200 focus:outline-none focus:ring-2 ring-offset-2 ring-blue-400 w-64">
+                    <MultiSelect.Values
+                        placeholder="Select fruits and vegetable"
+                        className="data-[placeholder=true]:text-gray-400 text-gray-900"
+                    />
+
+                    <TriggerIcon />
+                </MultiSelect.Trigger>
+
+                <MultiSelect.Content
+                    className="bg-white border border-solid border-gray-100 shadow rounded p-1"
+                    offset={5}>
+                    {items.map(item => (
+                        <MultiSelect.Item
+                            key={item.value}
+                            value={item.value}
+                            text={item.label}
+                            className="text-gray-900 py-1 cursor-default rounded-sm px-4 pl-8 relative focus:bg-blue-600 focus:text-white">
+                            <Indicator />
+                            {item.label}
+                        </MultiSelect.Item>
+                    ))}
+                </MultiSelect.Content>
+            </MultiSelect.Root>
+        </fieldset>
+    )
+}

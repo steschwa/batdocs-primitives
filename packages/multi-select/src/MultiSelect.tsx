@@ -40,7 +40,6 @@ export function Root(props: RootProps) {
         values: controlledValues,
         defaultValues,
         onValuesChange,
-        //
         children,
     } = props
 
