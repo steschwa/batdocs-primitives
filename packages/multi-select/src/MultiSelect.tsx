@@ -29,6 +29,7 @@ export type RootProps = {
     defaultValues?: string[]
     onValuesChange?: (values: string[]) => void
     //
+    disabled?: boolean
     children: React.ReactNode
 }
 export function Root(props: RootProps) {
@@ -40,6 +41,8 @@ export function Root(props: RootProps) {
         values: controlledValues,
         defaultValues,
         onValuesChange,
+        //
+        disabled = false,
         children,
     } = props
 
@@ -59,7 +62,7 @@ export function Root(props: RootProps) {
 
     return (
         <MultiSelectContext.Provider
-            value={{ open, setOpen, values, setValues, trigger, setTrigger }}>
+            value={{ open, setOpen, values, setValues, trigger, setTrigger, disabled }}>
             <Collection.Provider>{children}</Collection.Provider>
         </MultiSelectContext.Provider>
     )
@@ -75,16 +78,22 @@ export type TriggerProps = TriggerOwnProps & Omit<SlotProps, keyof TriggerOwnPro
 export function Trigger(props: TriggerProps) {
     const { asChild = false, ...restProps } = props
 
-    const { setOpen, setTrigger } = useMultiSelectContext()
+    const { setOpen, setTrigger, disabled } = useMultiSelectContext()
+
+    const open = () => {
+        if (!disabled) {
+            setOpen(true)
+        }
+    }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (["Space", "Enter"].includes(event.code)) {
-            setOpen(true)
+            open()
         }
     }
     const handlePointerDown = (event: React.PointerEvent) => {
         event.preventDefault()
-        setOpen(true)
+        open()
     }
 
     const Comp = asChild ? Slot : "button"
@@ -93,6 +102,7 @@ export function Trigger(props: TriggerProps) {
         <Comp
             {...restProps}
             ref={setTrigger}
+            disabled={disabled}
             onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
             onPointerDown={composeEventHandlers(restProps.onPointerDown, handlePointerDown)}
         />

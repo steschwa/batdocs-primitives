@@ -7,6 +7,8 @@ type MultiSelectContextProps = {
     values: string[]
     setValues: (values: string[]) => void
     //
+    disabled: boolean
+    //
     trigger: HTMLElement | null
     setTrigger: (element: HTMLElement | null) => void
 }
@@ -16,6 +18,8 @@ export const MultiSelectContext = createContext<MultiSelectContextProps>({
     //
     values: [],
     setValues: noop,
+    //
+    disabled: false,
     //
     trigger: null,
     setTrigger: noop,
