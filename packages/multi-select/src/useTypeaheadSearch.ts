@@ -1,20 +1,16 @@
 import * as React from "react"
-import { useCollection } from "./MultiSelect.collection"
 import { MultiSelectCollectionItem } from "./MultiSelect.types"
+import { useEnabledItems } from "./useEnabledItems"
 
 type UseTypeaheadSearchReturn = {
     setSearch: React.Dispatch<React.SetStateAction<string>>
 }
 
 export function useTypeaheadSearch(): UseTypeaheadSearchReturn {
-    const { getItems } = useCollection()
-
     const [search, setInternalSearch] = React.useState("")
     const timeout = React.useRef<NodeJS.Timeout>()
 
-    const getEnabledItems = React.useCallback(() => {
-        return getItems().filter(item => !item.disabled)
-    }, [getItems])
+    const getEnabledItems = useEnabledItems()
 
     React.useEffect(() => {
         if (search === "") {

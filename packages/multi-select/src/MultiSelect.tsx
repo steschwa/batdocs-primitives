@@ -1,25 +1,26 @@
+import { composeEventHandlers } from "@batdocs/compose-event-handlers"
+import { useComposedRefs } from "@batdocs/compose-refs"
+import { composeStyles } from "@batdocs/compose-styles"
 import { useControllableState } from "@batdocs/use-controllable-state"
+import {
+    flip as flipMiddleware,
+    offset as offsetMiddleware,
+    size as sizeMiddleware,
+    useFloating,
+} from "@floating-ui/react-dom"
+import * as PortalPrimitives from "@radix-ui/react-portal"
+import { Slot, SlotProps } from "@radix-ui/react-slot"
 import * as React from "react"
+import { Collection } from "./MultiSelect.collection"
 import {
     MultiSelectContext,
     MultiSelectItemContext,
     useMultiSelectContext,
     useMultiSelectItemContext,
 } from "./MultiSelect.context"
-import { Slot, SlotProps } from "@radix-ui/react-slot"
-import {
-    useFloating,
-    offset as offsetMiddleware,
-    size as sizeMiddleware,
-    flip as flipMiddleware,
-} from "@floating-ui/react-dom"
-import { useComposedRefs } from "@batdocs/compose-refs"
-import { composeStyles } from "@batdocs/compose-styles"
-import { Collection, useCollection } from "./MultiSelect.collection"
 import { produceToggleValue } from "./MultiSelect.utils"
+import { useEnabledItems } from "./useEnabledItems"
 import { useTypeaheadSearch } from "./useTypeaheadSearch"
-import { composeEventHandlers } from "@batdocs/compose-event-handlers"
-import * as PortalPrimitives from "@radix-ui/react-portal"
 
 export type RootProps = {
     open?: boolean
@@ -202,8 +203,8 @@ export function Content(props: ContentProps) {
         reference(trigger)
     }, [reference, trigger])
 
-    const { getItems } = useCollection()
     const { setSearch } = useTypeaheadSearch()
+    const getEnabledItems = useEnabledItems()
 
     const closeContent = React.useCallback(() => {
         setOpen(false)
@@ -211,10 +212,6 @@ export function Content(props: ContentProps) {
             trigger?.focus({ preventScroll: true })
         })
     }, [setOpen, trigger])
-
-    const getEnabledItems = React.useCallback(() => {
-        return getItems().filter(item => !item.disabled)
-    }, [getItems])
 
     React.useEffect(() => {
         if (!initialized) {
