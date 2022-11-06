@@ -17,9 +17,9 @@
         "clean": "yarn workspaces foreach run clean",
         "build": "yarn workspaces foreach run build",
         "publish": "yarn workspaces foreach run publish",
-        "version:patch": "yarn workspaces foreach --exclude primitives version patch",
-        "version:minor": "yarn workspaces foreach --exclude primitives version minor",
-        "version:major": "yarn workspaces foreach --exclude primitives version major"
+        "version:patch": "yarn workspaces foreach --exclude @batdocs/primitives version patch",
+        "version:minor": "yarn workspaces foreach --exclude @batdocs/primitives version minor",
+        "version:major": "yarn workspaces foreach --exclude @batdocs/primitives version major"
     },
     "dependencies": {
         "react": "^18.2.0",

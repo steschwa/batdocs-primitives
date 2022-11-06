@@ -1,6 +1,6 @@
 {
     "name": "@batdocs/use-controllable-state",
-    "version": "2.0.2",
+    "version": "3.0.0",
     "packageManager": "yarn@3.2.4",
     "repository": {
         "type": "git",

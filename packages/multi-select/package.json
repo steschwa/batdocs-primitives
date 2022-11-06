@@ -1,6 +1,6 @@
 {
     "name": "@batdocs/multi-select",
-    "version": "0.0.0",
+    "version": "3.0.0",
     "packageManager": "yarn@3.2.4",
     "repository": {
         "type": "git",
