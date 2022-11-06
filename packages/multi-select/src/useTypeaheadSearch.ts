@@ -1,14 +1,16 @@
-import { delayFocus } from "@batdocs/focus"
 import * as React from "react"
-import { ListboxCollectionItem } from "./Listbox.types"
+import { MultiSelectCollectionItem } from "./MultiSelect.types"
+import { useEnabledItems } from "./useEnabledItems"
 
 type UseTypeaheadSearchReturn = {
     setSearch: React.Dispatch<React.SetStateAction<string>>
 }
 
-export function useTypeaheadSearch(getItemsFn: GetItemsFn): UseTypeaheadSearchReturn {
+export function useTypeaheadSearch(): UseTypeaheadSearchReturn {
     const [search, setInternalSearch] = React.useState("")
     const timeout = React.useRef<NodeJS.Timeout>()
+
+    const getEnabledItems = useEnabledItems()
 
     React.useEffect(() => {
         if (search === "") {
@@ -42,26 +44,24 @@ export function useTypeaheadSearch(getItemsFn: GetItemsFn): UseTypeaheadSearchRe
 
         setInternalSearch(nextSearch)
 
-        const currentFocusedItem = getItemsFn().find(item => {
+        const currentFocusedItem = getEnabledItems().find(item => {
             return item.ref.current === document.activeElement
         })
 
-        const nextItem = typeaheadSearch(nextSearch, getItemsFn(), currentFocusedItem)
+        const nextItem = typeaheadSearch(nextSearch, getEnabledItems(), currentFocusedItem)
         if (nextItem) {
-            delayFocus(nextItem.ref.current)
+            nextItem.ref.current?.focus()
         }
     }
 
     return { setSearch }
 }
 
-type GetItemsFn = () => ListboxCollectionItem[]
-
 function computed<Fn extends (...args: never[]) => unknown>(fn: Fn): ReturnType<Fn> {
     return fn() as ReturnType<Fn>
 }
 
-function typeaheadSearch<T extends ListboxCollectionItem>(
+function typeaheadSearch<T extends MultiSelectCollectionItem>(
     search: string,
     items: T[],
     currentItem?: T,

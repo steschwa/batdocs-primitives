@@ -6,4 +6,4 @@ export type ItemData = {
     disabled: boolean
 }
 
-export type ListboxCollectionItem = CollectionItem<HTMLDivElement, ItemData>
+export type MultiSelectCollectionItem = CollectionItem<HTMLDivElement, ItemData>

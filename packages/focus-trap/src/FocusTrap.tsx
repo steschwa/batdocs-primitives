@@ -32,7 +32,6 @@ export const FocusTrap = React.forwardRef<HTMLElement, FocusTrapProps>((props, f
         <Comp
             {...restProps}
             ref={composedRef as never}
-            tabIndex={-1}
             onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
         />
     )
