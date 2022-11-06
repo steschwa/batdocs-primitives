@@ -19,6 +19,7 @@ import { Collection, useCollection } from "./MultiSelect.collection"
 import { produceToggleValue } from "./MultiSelect.utils"
 import { useTypeaheadSearch } from "./useTypeaheadSearch"
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
+import * as PortalPrimitives from "@radix-ui/react-portal"
 
 export type RootProps = {
     open?: boolean
@@ -149,6 +150,9 @@ export type IconProps = React.ComponentPropsWithoutRef<"span">
 export function Icon(props: IconProps) {
     return <span {...props} />
 }
+
+export type PortalProps = PortalPrimitives.PortalProps
+export const Portal = PortalPrimitives.Portal
 
 type ContentOwnProps = {
     /**
