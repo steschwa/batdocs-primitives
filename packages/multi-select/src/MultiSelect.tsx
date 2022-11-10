@@ -21,6 +21,7 @@ import {
 import { produceToggleValue } from "./MultiSelect.utils"
 import { useEnabledItems } from "./useEnabledItems"
 import { useTypeaheadSearch } from "./useTypeaheadSearch"
+import { usePointerDownOutside } from "@batdocs/use-pointer-down-outside"
 
 export type RootProps = {
     open?: boolean
@@ -120,7 +121,7 @@ type ValuesOwnProps = {
 }
 export type ValuesProps = ValuesOwnProps & Omit<SlotProps, keyof ValuesOwnProps>
 export function Values(props: ValuesProps) {
-    const { asChild = false, children, placeholder, ...restProps } = props
+    const { asChild = false, placeholder, children, ...restProps } = props
 
     const { values } = useMultiSelectContext()
 
@@ -147,9 +148,19 @@ export function Values(props: ValuesProps) {
     )
 }
 
-export type IconProps = React.ComponentPropsWithoutRef<"span">
+type IconOwnProps = {
+    /**
+     * @default false
+     */
+    asChild?: boolean
+}
+export type IconProps = IconOwnProps & Omit<SlotProps, keyof IconOwnProps>
 export function Icon(props: IconProps) {
-    return <span {...props} />
+    const { asChild = false, ...restProps } = props
+
+    const Comp = asChild ? Slot : "span"
+
+    return <Comp {...restProps} />
 }
 
 export type PortalProps = PortalPrimitives.PortalProps
@@ -197,8 +208,6 @@ export function Content(props: ContentProps) {
         ],
     })
 
-    const composedRefs = useComposedRefs<HTMLDivElement>(ref, floating)
-
     React.useLayoutEffect(() => {
         reference(trigger)
     }, [reference, trigger])
@@ -213,26 +222,11 @@ export function Content(props: ContentProps) {
         })
     }, [setOpen, trigger])
 
-    React.useEffect(() => {
-        if (!initialized) {
-            return
-        }
+    const pointerOutsideRef = usePointerDownOutside(initialized, () => {
+        closeContent()
+    })
 
-        const handler = (event: PointerEvent) => {
-            if (!ref.current) {
-                return
-            }
-
-            if (!ref.current.contains(event.target as HTMLElement)) {
-                closeContent()
-            }
-        }
-
-        document.addEventListener("pointerdown", handler)
-        return () => {
-            document.removeEventListener("pointerdown", handler)
-        }
-    }, [initialized, closeContent])
+    const composedRef = useComposedRefs(ref, floating, pointerOutsideRef)
 
     React.useEffect(() => {
         if (!initialized) {
@@ -326,7 +320,7 @@ export function Content(props: ContentProps) {
     }
 
     return (
-        <Collection.Slot ref={composedRefs}>
+        <Collection.Slot ref={composedRef}>
             <div
                 {...restProps}
                 role="listbox"

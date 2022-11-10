@@ -1430,6 +1430,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@batdocs/date-picker@workspace:packages/date-picker":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/date-picker@workspace:packages/date-picker"
+  dependencies:
+    "@batdocs/compose-event-handlers": "workspace:*"
+    "@batdocs/compose-refs": "workspace:*"
+    "@batdocs/use-controllable-state": "workspace:*"
+    "@floating-ui/react-dom": ^1.0.0
+    "@radix-ui/react-portal": ^1.0.1
+    "@radix-ui/react-slot": ^1.0.1
+    tsup: ^6.4.0
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  languageName: unknown
+  linkType: soft
+
 "@batdocs/drawer@workspace:packages/drawer":
   version: 0.0.0-use.local
   resolution: "@batdocs/drawer@workspace:packages/drawer"
@@ -1538,6 +1555,17 @@ __metadata:
     tsup: ^6.3.0
   peerDependencies:
     react: "*"
+  languageName: unknown
+  linkType: soft
+
+"@batdocs/use-pointer-down-outside@workspace:packages/use-pointer-down-outside":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/use-pointer-down-outside@workspace:packages/use-pointer-down-outside"
+  dependencies:
+    tsup: ^6.4.0
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
   languageName: unknown
   linkType: soft
 
