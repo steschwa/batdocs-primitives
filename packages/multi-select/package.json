@@ -26,9 +26,9 @@
         "@batdocs/compose-refs": "workspace:*",
         "@batdocs/compose-styles": "workspace:*",
         "@batdocs/use-controllable-state": "workspace:*",
+        "@batdocs/use-floating-position": "workspace:*",
         "@batdocs/use-initial-focus": "workspace:*",
         "@batdocs/use-pointer-down-outside": "workspace:*",
-        "@floating-ui/react-dom": "^1.0.0",
         "@radix-ui/react-portal": "^1.0.1",
         "@radix-ui/react-slot": "^1.0.1"
     },

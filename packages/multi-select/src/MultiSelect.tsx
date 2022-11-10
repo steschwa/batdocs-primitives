@@ -2,14 +2,9 @@ import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
 import { composeStyles } from "@batdocs/compose-styles"
 import { useControllableState } from "@batdocs/use-controllable-state"
+import { useFloatingPosition } from "@batdocs/use-floating-position"
 import { useInitialFocus } from "@batdocs/use-initial-focus"
 import { usePointerDownOutside } from "@batdocs/use-pointer-down-outside"
-import {
-    flip as flipMiddleware,
-    offset as offsetMiddleware,
-    size as sizeMiddleware,
-    useFloating,
-} from "@floating-ui/react-dom"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import * as React from "react"
@@ -18,7 +13,7 @@ import {
     MultiSelectContext,
     MultiSelectItemContext,
     useMultiSelectContext,
-    useMultiSelectItemContext,
+    useMultiSelectItemContext
 } from "./MultiSelect.context"
 import { produceToggleValue } from "./MultiSelect.utils"
 import { useEnabledItems } from "./useEnabledItems"
@@ -185,28 +180,8 @@ export function Content(props: ContentProps) {
     const { open, setOpen, trigger, values, setValues } = useMultiSelectContext()
 
     const ref = React.useRef<HTMLDivElement>(null)
-    const { reference, floating, x, y } = useFloating({
-        placement: "bottom-start",
-        middleware: [
-            offsetMiddleware(offset),
-            sizeMiddleware({
-                apply({ rects, elements }) {
-                    Object.assign(elements.floating.style, {
-                        minWidth: `${rects.reference.width}px`,
-                    })
-                },
-            }),
-            flipMiddleware({
-                mainAxis: true,
-                crossAxis: true,
-                fallbackPlacements: ["bottom", "bottom-end", "top-start", "top", "top-end"],
-            }),
-        ],
-    })
 
-    React.useLayoutEffect(() => {
-        reference(trigger)
-    }, [reference, trigger])
+    const { floating, style: floatingStyle } = useFloatingPosition(trigger, { offset })
 
     const { setSearch } = useTypeaheadSearch()
     const getEnabledItems = useEnabledItems()
@@ -300,15 +275,7 @@ export function Content(props: ContentProps) {
                 {...restProps}
                 role="listbox"
                 aria-multiselectable="true"
-                style={composeStyles(
-                    restProps.style,
-                    {
-                        position: "absolute",
-                        left: x ?? 0,
-                        top: y ?? 0,
-                    },
-                    { pointerEvents: "auto" },
-                )}
+                style={composeStyles(restProps.style, floatingStyle, { pointerEvents: "auto" })}
                 onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
             />
         </Collection.Slot>

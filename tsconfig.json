@@ -6,6 +6,7 @@
             "@batdocs/use-callback-ref": ["./packages/use-callback-ref/src"],
             "@batdocs/use-pointer-down-outside": ["./packages/use-pointer-down-outside/src"],
             "@batdocs/use-initial-focus": ["./packages/use-initial-focus/src"],
+            "@batdocs/use-floating-position": ["./packages/use-floating-position/src"],
             "@batdocs/compose-refs": ["./packages/compose-refs/src"],
             "@batdocs/compose-styles": ["./packages/compose-styles/src"],
             "@batdocs/compose-event-handlers": ["./packages/compose-event-handlers/src"],
