@@ -1,14 +1,16 @@
 import { composeEventHandlers } from "@batdocs/compose-event-handlers"
+import { useComposedRefs } from "@batdocs/compose-refs"
 import { FocusTrap } from "@batdocs/focus-trap"
 import { useControllableState } from "@batdocs/use-controllable-state"
+import { usePointerDownOutside } from "@batdocs/use-pointer-down-outside"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import * as React from "react"
 import {
     DrawerContentContext,
     DrawerContext,
-    useDrawerContext,
     useDrawerContentContext,
+    useDrawerContext,
 } from "./Drawer.context"
 
 export type RootProps = {
@@ -112,48 +114,20 @@ export function Content(props: ContentProps) {
 
     const [close, setClose] = React.useState<HTMLElement | null>(null)
 
-    const [previousOpen, setPreviousOpen] = React.useState(false)
-    const [initialized, setInitialized] = React.useState(false)
-    if (!open && initialized) {
-        setInitialized(false)
-    }
-
     const ref = React.useRef<HTMLDivElement>(null)
 
-    React.useEffect(() => {
-        if (!open) {
-            return
-        }
-        setInitialized(true)
-    }, [open])
+    const [previousOpen, setPreviousOpen] = React.useState(false)
 
-    React.useEffect(() => {
-        /**
-         * Delay setup of event handlers by one render to
-         * prevent closing the content if opened by a pointer
-         */
-        if (!initialized) {
-            return
-        }
+    const closeContent = () => {
+        setOpen(false)
+        setTimeout(() => {
+            trigger?.focus({ preventScroll: true })
+        })
+    }
 
-        const pointerDownHandler = (event: PointerEvent) => {
-            if (!ref.current) {
-                return
-            }
-            if (!(event.target instanceof HTMLElement)) {
-                return
-            }
+    const pointerOutsideRef = usePointerDownOutside<HTMLDivElement>(open, closeContent)
 
-            if (event.target !== ref.current && !ref.current.contains(event.target)) {
-                setOpen(false)
-            }
-        }
-
-        document.addEventListener("pointerdown", pointerDownHandler)
-        return () => {
-            document.removeEventListener("pointerdown", pointerDownHandler)
-        }
-    }, [initialized, setOpen])
+    const composedRef = useComposedRefs<HTMLDivElement>(ref, pointerOutsideRef)
 
     React.useEffect(() => {
         if (!open && previousOpen) {
@@ -186,7 +160,7 @@ export function Content(props: ContentProps) {
             <FocusTrap asChild>
                 <div
                     {...restProps}
-                    ref={ref}
+                    ref={composedRef}
                     tabIndex={-1}
                     data-open={open}
                     onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}

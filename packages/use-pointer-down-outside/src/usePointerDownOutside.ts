@@ -8,11 +8,22 @@ export function usePointerDownOutside<T extends HTMLElement = HTMLElement>(
     callback: UsePointerDownCallback,
 ): UsePointerDownReturn<T> {
     const ref = React.useRef<T>(null)
+    const [ready, setReady] = React.useState(false)
+    if (!enabled && ready) {
+        setReady(false)
+    }
+
+    React.useEffect(() => {
+        if (!enabled) {
+            return
+        }
+        setReady(true)
+    }, [enabled])
 
     const callbackRef = useCallbackRef(callback)
 
     React.useEffect(() => {
-        if (!enabled) {
+        if (!ready) {
             return
         }
 
@@ -26,11 +37,17 @@ export function usePointerDownOutside<T extends HTMLElement = HTMLElement>(
             }
         }
 
+        const originalPointerEvents = document.body.style.pointerEvents
+        document.body.style.pointerEvents = "none"
+
         document.addEventListener("pointerdown", handler)
+
         return () => {
+            document.body.style.pointerEvents = originalPointerEvents
+
             document.removeEventListener("pointerdown", handler)
         }
-    }, [enabled, callbackRef])
+    }, [ready, callbackRef])
 
     return ref
 }

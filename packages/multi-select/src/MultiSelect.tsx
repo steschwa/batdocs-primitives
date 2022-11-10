@@ -2,11 +2,12 @@ import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
 import { composeStyles } from "@batdocs/compose-styles"
 import { useControllableState } from "@batdocs/use-controllable-state"
+import { usePointerDownOutside } from "@batdocs/use-pointer-down-outside"
 import {
     flip as flipMiddleware,
     offset as offsetMiddleware,
     size as sizeMiddleware,
-    useFloating,
+    useFloating
 } from "@floating-ui/react-dom"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
@@ -16,12 +17,11 @@ import {
     MultiSelectContext,
     MultiSelectItemContext,
     useMultiSelectContext,
-    useMultiSelectItemContext,
+    useMultiSelectItemContext
 } from "./MultiSelect.context"
 import { produceToggleValue } from "./MultiSelect.utils"
 import { useEnabledItems } from "./useEnabledItems"
 import { useTypeaheadSearch } from "./useTypeaheadSearch"
-import { usePointerDownOutside } from "@batdocs/use-pointer-down-outside"
 
 export type RootProps = {
     open?: boolean
@@ -222,24 +222,9 @@ export function Content(props: ContentProps) {
         })
     }, [setOpen, trigger])
 
-    const pointerOutsideRef = usePointerDownOutside(initialized, () => {
-        closeContent()
-    })
+    const pointerOutsideRef = usePointerDownOutside(open, closeContent)
 
     const composedRef = useComposedRefs(ref, floating, pointerOutsideRef)
-
-    React.useEffect(() => {
-        if (!initialized) {
-            return
-        }
-
-        const originalPointerEvents = document.body.style.pointerEvents
-        document.body.style.pointerEvents = "none"
-
-        return () => {
-            document.body.style.pointerEvents = originalPointerEvents
-        }
-    }, [initialized])
 
     React.useEffect(() => {
         if (!open || initialized) {

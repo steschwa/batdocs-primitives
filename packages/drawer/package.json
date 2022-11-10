@@ -24,6 +24,7 @@
         "@batdocs/compose-event-handlers": "workspace:*",
         "@batdocs/focus-trap": "workspace:*",
         "@batdocs/use-controllable-state": "workspace:*",
+        "@batdocs/compose-refs": "workspace:*",
         "@radix-ui/react-portal": "^1.0.1",
         "@radix-ui/react-slot": "^1.0.1"
     },
