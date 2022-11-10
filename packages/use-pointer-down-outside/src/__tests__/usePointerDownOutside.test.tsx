@@ -49,7 +49,7 @@ function Wrapper(props: { enabled: boolean; callback: () => void }) {
     const ref = usePointerDownOutside<HTMLDivElement>(props.enabled, props.callback)
 
     return (
-        <div>
+        <div style={{ pointerEvents: "auto" }}>
             <div ref={ref} tabIndex={0} data-testid="inner">
                 <button>Inside</button>
             </div>
