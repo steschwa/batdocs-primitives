@@ -2,12 +2,9 @@ import { composeEventHandlers } from "@batdocs/compose-event-handlers"
 import { useComposedRefs } from "@batdocs/compose-refs"
 import { composeStyles } from "@batdocs/compose-styles"
 import { useControllableState } from "@batdocs/use-controllable-state"
-import {
-    flip as flipMiddleware,
-    offset as offsetMiddleware,
-    size as sizeMiddleware,
-    useFloating,
-} from "@floating-ui/react-dom"
+import { useFloatingPosition } from "@batdocs/use-floating-position"
+import { useInitialFocus } from "@batdocs/use-initial-focus"
+import { usePointerDownOutside } from "@batdocs/use-pointer-down-outside"
 import * as PortalPrimitives from "@radix-ui/react-portal"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import * as React from "react"
@@ -16,7 +13,7 @@ import {
     MultiSelectContext,
     MultiSelectItemContext,
     useMultiSelectContext,
-    useMultiSelectItemContext,
+    useMultiSelectItemContext
 } from "./MultiSelect.context"
 import { produceToggleValue } from "./MultiSelect.utils"
 import { useEnabledItems } from "./useEnabledItems"
@@ -120,7 +117,7 @@ type ValuesOwnProps = {
 }
 export type ValuesProps = ValuesOwnProps & Omit<SlotProps, keyof ValuesOwnProps>
 export function Values(props: ValuesProps) {
-    const { asChild = false, children, placeholder, ...restProps } = props
+    const { asChild = false, placeholder, children, ...restProps } = props
 
     const { values } = useMultiSelectContext()
 
@@ -147,9 +144,19 @@ export function Values(props: ValuesProps) {
     )
 }
 
-export type IconProps = React.ComponentPropsWithoutRef<"span">
+type IconOwnProps = {
+    /**
+     * @default false
+     */
+    asChild?: boolean
+}
+export type IconProps = IconOwnProps & Omit<SlotProps, keyof IconOwnProps>
 export function Icon(props: IconProps) {
-    return <span {...props} />
+    const { asChild = false, ...restProps } = props
+
+    const Comp = asChild ? Slot : "span"
+
+    return <Comp {...restProps} />
 }
 
 export type PortalProps = PortalPrimitives.PortalProps
@@ -172,102 +179,39 @@ export function Content(props: ContentProps) {
 
     const { open, setOpen, trigger, values, setValues } = useMultiSelectContext()
 
-    const [initialized, setInitialized] = React.useState(false)
-    if (!open && initialized) {
-        setInitialized(false)
-    }
-
     const ref = React.useRef<HTMLDivElement>(null)
-    const { reference, floating, x, y } = useFloating({
-        placement: "bottom-start",
-        middleware: [
-            offsetMiddleware(offset),
-            sizeMiddleware({
-                apply({ rects, elements }) {
-                    Object.assign(elements.floating.style, {
-                        minWidth: `${rects.reference.width}px`,
-                    })
-                },
-            }),
-            flipMiddleware({
-                mainAxis: true,
-                crossAxis: true,
-                fallbackPlacements: ["bottom", "bottom-end", "top-start", "top", "top-end"],
-            }),
-        ],
-    })
 
-    const composedRefs = useComposedRefs<HTMLDivElement>(ref, floating)
-
-    React.useLayoutEffect(() => {
-        reference(trigger)
-    }, [reference, trigger])
+    const { floating, style: floatingStyle } = useFloatingPosition(trigger, { offset })
 
     const { setSearch } = useTypeaheadSearch()
     const getEnabledItems = useEnabledItems()
 
-    const closeContent = React.useCallback(() => {
+    const closeContent = () => {
         setOpen(false)
         setTimeout(() => {
             trigger?.focus({ preventScroll: true })
         })
-    }, [setOpen, trigger])
+    }
 
-    React.useEffect(() => {
-        if (!initialized) {
-            return
-        }
+    const pointerOutsideRef = usePointerDownOutside(open, closeContent)
 
-        const handler = (event: PointerEvent) => {
-            if (!ref.current) {
-                return
-            }
+    const composedRef = useComposedRefs(ref, floating, pointerOutsideRef)
 
-            if (!ref.current.contains(event.target as HTMLElement)) {
-                closeContent()
-            }
-        }
-
-        document.addEventListener("pointerdown", handler)
-        return () => {
-            document.removeEventListener("pointerdown", handler)
-        }
-    }, [initialized, closeContent])
-
-    React.useEffect(() => {
-        if (!initialized) {
-            return
-        }
-
-        const originalPointerEvents = document.body.style.pointerEvents
-        document.body.style.pointerEvents = "none"
-
-        return () => {
-            document.body.style.pointerEvents = originalPointerEvents
-        }
-    }, [initialized])
-
-    React.useEffect(() => {
-        if (!open || initialized) {
-            return
-        }
-
+    useInitialFocus(open, () => {
         const items = getEnabledItems()
         const firstSelectedItem = items.find(item => {
             return values.includes(item.value)
         })
 
         if (firstSelectedItem) {
-            firstSelectedItem.ref.current?.focus()
+            return firstSelectedItem.ref.current
         } else {
             const [first] = items
             if (first) {
-                first.ref.current?.focus()
+                return first.ref.current
             }
         }
-
-        setInitialized(true)
-    }, [open, getEnabledItems, values, initialized])
+    })
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.code === "Tab") {
@@ -326,20 +270,12 @@ export function Content(props: ContentProps) {
     }
 
     return (
-        <Collection.Slot ref={composedRefs}>
+        <Collection.Slot ref={composedRef}>
             <div
                 {...restProps}
                 role="listbox"
                 aria-multiselectable="true"
-                style={composeStyles(
-                    restProps.style,
-                    {
-                        position: "absolute",
-                        left: x ?? 0,
-                        top: y ?? 0,
-                    },
-                    { pointerEvents: "auto" },
-                )}
+                style={composeStyles(restProps.style, floatingStyle, { pointerEvents: "auto" })}
                 onKeyDown={composeEventHandlers(restProps.onKeyDown, handleKeyDown)}
             />
         </Collection.Slot>

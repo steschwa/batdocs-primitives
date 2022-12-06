@@ -1,6 +1,6 @@
 {
-    "name": "@batdocs/drawer",
-    "version": "3.1.0",
+    "name": "@batdocs/use-initial-focus",
+    "version": "0.0.0",
     "packageManager": "yarn@3.2.4",
     "repository": {
         "type": "git",
@@ -17,23 +17,16 @@
     "sideEffects": false,
     "scripts": {
         "clean": "rm -rf dist",
-        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts --metafile",
+        "build": "tsup src/index.ts --format esm,cjs --target esnext --dts",
         "publish": "yarn npm publish --access public --tolerate-republish"
     },
     "dependencies": {
-        "@batdocs/compose-event-handlers": "workspace:*",
-        "@batdocs/compose-refs": "workspace:*",
-        "@batdocs/focus-trap": "workspace:*",
-        "@batdocs/use-controllable-state": "workspace:*",
-        "@batdocs/use-initial-focus": "workspace:*",
-        "@radix-ui/react-portal": "^1.0.1",
-        "@radix-ui/react-slot": "^1.0.1"
+        "@batdocs/use-callback-ref": "workspace:*"
     },
     "devDependencies": {
-        "tsup": "^6.3.0"
+        "tsup": "^6.4.0"
     },
     "peerDependencies": {
-        "react": "*",
-        "react-dom": "*"
+        "react": "*"
     }
 }

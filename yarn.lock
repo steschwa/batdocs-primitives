@@ -1435,8 +1435,10 @@ __metadata:
   resolution: "@batdocs/drawer@workspace:packages/drawer"
   dependencies:
     "@batdocs/compose-event-handlers": "workspace:*"
+    "@batdocs/compose-refs": "workspace:*"
     "@batdocs/focus-trap": "workspace:*"
     "@batdocs/use-controllable-state": "workspace:*"
+    "@batdocs/use-initial-focus": "workspace:*"
     "@radix-ui/react-portal": ^1.0.1
     "@radix-ui/react-slot": ^1.0.1
     tsup: ^6.3.0
@@ -1482,7 +1484,9 @@ __metadata:
     "@batdocs/compose-refs": "workspace:*"
     "@batdocs/compose-styles": "workspace:*"
     "@batdocs/use-controllable-state": "workspace:*"
-    "@floating-ui/react-dom": ^1.0.0
+    "@batdocs/use-floating-position": "workspace:*"
+    "@batdocs/use-initial-focus": "workspace:*"
+    "@batdocs/use-pointer-down-outside": "workspace:*"
     "@radix-ui/react-portal": ^1.0.1
     "@radix-ui/react-slot": ^1.0.1
     tsup: ^6.4.0
@@ -1536,6 +1540,39 @@ __metadata:
   dependencies:
     "@batdocs/use-callback-ref": "workspace:*"
     tsup: ^6.3.0
+  peerDependencies:
+    react: "*"
+  languageName: unknown
+  linkType: soft
+
+"@batdocs/use-floating-position@workspace:*, @batdocs/use-floating-position@workspace:packages/use-floating-position":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/use-floating-position@workspace:packages/use-floating-position"
+  dependencies:
+    "@floating-ui/react-dom": ^1.0.0
+    tsup: ^6.4.0
+  peerDependencies:
+    react: "*"
+  languageName: unknown
+  linkType: soft
+
+"@batdocs/use-initial-focus@workspace:*, @batdocs/use-initial-focus@workspace:packages/use-initial-focus":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/use-initial-focus@workspace:packages/use-initial-focus"
+  dependencies:
+    "@batdocs/use-callback-ref": "workspace:*"
+    tsup: ^6.4.0
+  peerDependencies:
+    react: "*"
+  languageName: unknown
+  linkType: soft
+
+"@batdocs/use-pointer-down-outside@workspace:*, @batdocs/use-pointer-down-outside@workspace:packages/use-pointer-down-outside":
+  version: 0.0.0-use.local
+  resolution: "@batdocs/use-pointer-down-outside@workspace:packages/use-pointer-down-outside"
+  dependencies:
+    "@batdocs/use-callback-ref": "workspace:*"
+    tsup: ^6.4.0
   peerDependencies:
     react: "*"
   languageName: unknown
